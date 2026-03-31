@@ -12,16 +12,5 @@ namespace backend.Repository
         : base(options)
         {
         }
-
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    string connectionString = new ConfigurationBuilder()
-        //        .AddJsonFile("appsettings.json")
-        //        .Build()
-        //        .GetConnectionString("Connection")
-        //        .ToString();
-
-        //    optionsBuilder.UseSqlServer(connectionString: connectionString);
-        //}
     }
 }

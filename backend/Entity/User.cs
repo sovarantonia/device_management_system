@@ -8,6 +8,7 @@
         public string? Location { get; set; }
         public string? Email { get; set; }
         public string? Password { get; set; }
+        public ICollection<Device> Devices { get; set; } = new List<Device>();
 
         public User(Guid id, string name, string role, string location, string email, string password)
         {
