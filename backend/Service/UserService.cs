@@ -100,6 +100,16 @@ namespace backend.Service
                 user.Devices = request.Devices;
             }
 
+            if ( request.Location != null)
+            {
+                user.Location = request.Location;
+            }
+
+            if (request.Role != null)
+            {
+                user.Role = request.Role;
+            }
+
             dbContext.Users.Update(user);
             await dbContext.SaveChangesAsync();
 
