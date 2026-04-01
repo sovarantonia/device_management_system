@@ -52,6 +52,7 @@ namespace backend.Service
 
             try
             {
+                userToSave.Password = BCrypt.Net.BCrypt.HashPassword(userToSave.Password);
                 dbContext.Users.Add(userToSave);
                 await dbContext.SaveChangesAsync();
 
