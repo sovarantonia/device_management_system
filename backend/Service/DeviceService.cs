@@ -106,5 +106,43 @@ namespace backend.Service
         {
             return await dbContext.Devices.Where(d => d.UserId == userId).ToListAsync();
         }
+
+        public async Task<bool> AssignDeviceAsync(Guid deviceId, Guid userId)
+        {
+            var device = await dbContext.Devices.FirstOrDefaultAsync(d => d.Id == deviceId);
+
+            if (device == null)
+            {
+                return false;
+            }
+                
+            if (device.UserId != null)
+            { 
+                return false; 
+            }
+
+            device.UserId = userId;
+            await dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> UnassignDeviceAsync(Guid deviceId, Guid userId)
+        {
+            var device = await dbContext.Devices.FirstOrDefaultAsync(d => d.Id == deviceId);
+
+            if (device == null)
+            { 
+                return false; 
+            }
+
+            if (device.UserId != userId)
+            { 
+                return false; 
+            }
+
+            device.UserId = null;
+            await dbContext.SaveChangesAsync();
+            return true;
+        }
     }
 }

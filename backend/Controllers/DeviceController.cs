@@ -34,7 +34,7 @@ namespace backend.Controllers
             return Ok(device);
         }
 
-        [HttpGet("/user/{userId:guid}")]
+        [HttpGet("user/{userId:guid}")]
         public async Task<IActionResult> GetUserDevices(Guid userId)
         {
             var devices = await deviceService.GetUserDevicesAsync(userId);
@@ -61,6 +61,34 @@ namespace backend.Controllers
             {
                 return NotFound("Device not found");
             }
+            var device = await deviceService.GetByIdAsync(id);
+
+            return Ok(device);
+        }
+
+        [HttpPut("{id:guid}/assign")]
+        public async Task<IActionResult> AssignDevice(Guid id, [FromQuery] Guid userId)
+        {
+            var updated = await deviceService.AssignDeviceAsync(id, userId);
+            if (!updated)
+            {
+                return BadRequest("Invalid request");
+            }
+
+            var device = await deviceService.GetByIdAsync(id);
+
+            return Ok(device);
+        }
+
+        [HttpPut("{id:guid}/unassign")]
+        public async Task<IActionResult> UnassignDevice(Guid id, [FromQuery] Guid userId)
+        {
+            var updated = await deviceService.UnassignDeviceAsync(id, userId);
+            if (!updated)
+            {
+                return BadRequest("Invalid request");
+            }
+
             var device = await deviceService.GetByIdAsync(id);
 
             return Ok(device);

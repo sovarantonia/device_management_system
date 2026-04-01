@@ -10,5 +10,7 @@ namespace backend.Service
         public Task<List<Device>> GetAllAsync();
         public Task<bool> UpdateDetailsAsync(Guid id, DeviceRequest device);
         public Task<List<Device>> GetUserDevicesAsync(Guid userId);
+        public Task<bool> AssignDeviceAsync(Guid deviceId, Guid userId);
+        public Task<bool> UnassignDeviceAsync(Guid deviceId, Guid userId);
     }
 }
