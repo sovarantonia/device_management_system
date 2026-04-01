@@ -22,7 +22,7 @@ namespace backend.Controllers
             
             if (user == null)
             {
-                return NotFound();
+                return NotFound("User not found");
             }
 
             return Ok(user);
@@ -38,15 +38,38 @@ namespace backend.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveUser([FromBody] User user)
         {
-            await userService.SaveAsync(user);
+            var created = await userService.SaveAsync(user);
+            if (!created)
+            {
+                return Conflict("Email already exists");
+            }
+
             return Ok(user);
         }
 
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         { 
-            await userService.DeleteAsync(id); 
+            var deleted = await userService.DeleteAsync(id); 
+            if (!deleted)
+            {
+                return NotFound("User not found");
+            }
+
             return Ok(); 
+        }
+
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UserUpdateRequest request)
+        {
+            var updated = await userService.UpdateAsync(id, request);
+            if (!updated)
+            {
+                return NotFound("User not found");
+            }
+            var user = await userService.GetByIdAsync(id);
+
+            return Ok(user);
         }
     }
 }
