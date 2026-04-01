@@ -18,7 +18,6 @@ namespace backend.Service
         public async Task<bool> DeleteAsync(Guid id)
         {
             var user = await dbContext.Users
-                .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Id == id);
 
             if (user == null)
