@@ -94,7 +94,7 @@ namespace backend.Service
 
             if (request.Password != null)
             {
-                user.Password = request.Password;
+                user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
             }
 
             if ( request.Location != null)
