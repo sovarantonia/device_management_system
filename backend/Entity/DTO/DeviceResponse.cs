@@ -1,8 +1,8 @@
-﻿
-namespace backend.Entity
+﻿namespace backend.Entity.DTO
 {
-    public class DeviceRequest
+    public class DeviceResponse
     {
+        public Guid? Id { get; set; }
         public string? Name { get; set; }
         public string? Manufacturer { get; set; }
         public string? DeviceType { get; set; }

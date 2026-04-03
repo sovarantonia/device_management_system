@@ -1,16 +1,17 @@
 ﻿using backend.Entity;
+using backend.Entity.DTO;
 
 namespace backend.Service
 {
     public interface IDeviceService
     {
-        public Task SaveAsync(DeviceRequest deviceToSave);
-        public Task<bool> DeleteAsync(Guid id);
-        public Task<Device?> GetByIdAsync(Guid id);
+        public Task<Device> SaveAsync(DeviceRequest deviceToSave);
+        public Task DeleteAsync(Guid id);
+        public Task<Device> GetByIdAsync(Guid id);
         public Task<List<Device>> GetAllAsync();
-        public Task<bool> UpdateDetailsAsync(Guid id, DeviceRequest device);
+        public Task<Device> UpdateDetailsAsync(Guid id, DeviceRequest device);
         public Task<List<Device>> GetUserDevicesAsync(Guid userId);
-        public Task<bool> AssignDeviceAsync(Guid deviceId, Guid userId);
-        public Task<bool> UnassignDeviceAsync(Guid deviceId, Guid userId);
+        public Task<Device> AssignDeviceAsync(Guid deviceId, Guid userId);
+        public Task<Device> UnassignDeviceAsync(Guid deviceId, Guid userId);
     }
 }

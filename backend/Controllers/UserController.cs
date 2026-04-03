@@ -1,4 +1,4 @@
-﻿using backend.Entity;
+﻿using backend.Entity.DTO;
 using backend.Service;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,57 +19,39 @@ namespace backend.Controllers
         public async Task<IActionResult> GetUserById(Guid id)
         {
             var user = await userService.GetByIdAsync(id);
-            
-            if (user == null)
-            {
-                return NotFound("User not found");
-            }
 
-            return Ok(user);
+            return Ok(UserMapper.ToDTO(user));
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         { 
             var users = await userService.GetAllAsync();
-            return Ok(users);
+            return Ok(users.Select(u => UserMapper.ToDTO(u)));
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveUser([FromBody] User user)
+        public async Task<IActionResult> SaveUser([FromBody] UserRequest userRequest)
         {
-            var created = await userService.SaveAsync(user);
-            if (!created)
-            {
-                return Conflict("Email already exists");
-            }
+            var user = await userService.SaveAsync(userRequest);
 
-            return Ok(user);
+            return Ok(UserMapper.ToDTO(user));
         }
 
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         { 
-            var deleted = await userService.DeleteAsync(id); 
-            if (!deleted)
-            {
-                return NotFound("User not found");
-            }
+            await userService.DeleteAsync(id); 
 
             return Ok(); 
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UserUpdateRequest request)
+        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UserRequest request)
         {
-            var updated = await userService.UpdateAsync(id, request);
-            if (!updated)
-            {
-                return NotFound("User not found");
-            }
-            var user = await userService.GetByIdAsync(id);
+            var user = await userService.UpdateAsync(id, request);
 
-            return Ok(user);
+            return Ok(UserMapper.ToDTO(user));
         }
     }
 }

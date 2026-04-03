@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using backend.Entity.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace backend.Controllers.filter
@@ -7,22 +8,54 @@ namespace backend.Controllers.filter
     {
         public void OnException(ExceptionContext context)
         {
-            if (context.Exception is ArgumentException ex)
+            var exception = context.Exception;
+
+            switch (exception)
             {
-                context.Result = new BadRequestObjectResult(new
-                {
-                    message = ex.Message
-                });
-                return;
+                case EntityNotFoundException:
+                    context.Result = new NotFoundObjectResult(new
+                    {
+                        message = exception.Message
+                    });
+                    return;
+
+                case ForbiddenAccessException:
+                    context.Result = new ObjectResult(new
+                    {
+                        message = exception.Message
+                    })
+                    {
+                        StatusCode = 403
+                    };
+                    return;
+
+                case ArgumentException:
+                    context.Result = new BadRequestObjectResult(new
+                    {
+                        message = exception.Message
+                    });
+                    return;
+
+                case ResourceConflictException:
+                    context.Result = new ConflictObjectResult(new
+                    {
+                        message = exception.Message
+                    });
+                    return;
+
+                default:
+                    context.Result = new ObjectResult(new
+                    {
+                        message = "Something went wrong"
+                    })
+                    {
+                        StatusCode = 500
+                    };
+                    return;
+
             }
 
-            context.Result = new ObjectResult(new
-            {
-                message = "Something went wrong"
-            })
-            {
-                StatusCode = 500
-            };
+            
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using backend.Entity;
+﻿using backend.Entity.DTO;
 using backend.Service;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,79 +19,60 @@ namespace backend.Controllers
         public async Task<IActionResult> GetDeviceById(Guid id)
         {
             var device = await deviceService.GetByIdAsync(id);
-            if (device == null)
-            {
-                return NotFound("Device not found");
-            }
 
-            return Ok(device);
+            return Ok(DeviceMapper.ToDTO(device));
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveDevice([FromBody] DeviceRequest device)
+        public async Task<IActionResult> SaveDevice([FromBody] DeviceRequest deviceRequest)
         {
-            await deviceService.SaveAsync(device);
-            return Ok(device);
+            var device = await deviceService.SaveAsync(deviceRequest);
+            return Ok(DeviceMapper.ToDTO(device));
         }
 
         [HttpGet("user/{userId:guid}")]
         public async Task<IActionResult> GetUserDevices(Guid userId)
         {
             var devices = await deviceService.GetUserDevicesAsync(userId);
-            return Ok(devices);
+            return Ok(devices.Select(u => DeviceMapper.ToDTO(u)));
         }
 
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteDevice(Guid id)
         {
-            var deleted = await deviceService.DeleteAsync(id);
-            if (!deleted)
-            {
-                return NotFound("Device not found");
-            }
-
+            await deviceService.DeleteAsync(id);
             return Ok();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllDevices()
+        {
+            var devices = await deviceService.GetAllAsync();
+            return Ok(devices.Select(u => DeviceMapper.ToDTO(u)));
         }
 
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateDeviceDetails(Guid id, [FromBody] DeviceRequest request)
         {
-            var updated = await deviceService.UpdateDetailsAsync(id, request);
-            if (!updated)
-            {
-                return NotFound("Device not found");
-            }
-            var device = await deviceService.GetByIdAsync(id);
+            var device = await deviceService.UpdateDetailsAsync(id, request);    
 
-            return Ok(device);
+            return Ok(DeviceMapper.ToDTO(device));
         }
 
         [HttpPut("{id:guid}/assign")]
         public async Task<IActionResult> AssignDevice(Guid id, [FromQuery] Guid userId)
         {
-            var updated = await deviceService.AssignDeviceAsync(id, userId);
-            if (!updated)
-            {
-                return BadRequest("Invalid request");
-            }
+            var device = await deviceService.AssignDeviceAsync(id, userId);
 
-            var device = await deviceService.GetByIdAsync(id);
-
-            return Ok(device);
+            return Ok(DeviceMapper.ToDTO(device));
         }
 
         [HttpPut("{id:guid}/unassign")]
         public async Task<IActionResult> UnassignDevice(Guid id, [FromQuery] Guid userId)
         {
-            var updated = await deviceService.UnassignDeviceAsync(id, userId);
-            if (!updated)
-            {
-                return BadRequest("Invalid request");
-            }
+            var device = await deviceService.UnassignDeviceAsync(id, userId);  
 
-            var device = await deviceService.GetByIdAsync(id);
-
-            return Ok(device);
+            return Ok(DeviceMapper.ToDTO(device));
         }
     }
 }

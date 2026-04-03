@@ -1,5 +1,7 @@
 ﻿
 using backend.Entity;
+using backend.Entity.DTO;
+using backend.Entity.Exceptions;
 using backend.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -15,20 +17,12 @@ namespace backend.Service
             this.dbContext = dbContext;
         }
 
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            var user = await dbContext.Users
-                .FirstOrDefaultAsync(u => u.Id == id);
-
-            if (user == null)
-            {
-                return false;
-            }
+            var user = await GetByIdAsync(id);
 
             dbContext.Users.Remove(user);
             await dbContext.SaveChangesAsync();
-
-            return true;
         }
 
         public async Task<List<User>> GetAllAsync()
@@ -36,42 +30,51 @@ namespace backend.Service
             return await dbContext.Users.ToListAsync();
         }
 
-        public async Task<User?> GetByIdAsync(Guid id)
+        public async Task<User> GetByIdAsync(Guid id)
         {
-            return await dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+            var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null)
+            {
+                throw new EntityNotFoundException($"User with id {id} does not exist");
+            }
+
+            return user;
         }
 
-        public async Task<bool> SaveAsync(User userToSave)
+        public async Task<User> SaveAsync(UserRequest request)
         {
-            var existingUser = await ExistsByEmailAsync(userToSave.Email);
+            var existingUser = await ExistsByEmailAsync(request.Email);
             if (existingUser)
             {
-                return false;
+                throw new ResourceConflictException($"User with email {request.Email} already exists");
             }
 
             try
             {
-                userToSave.Password = BCrypt.Net.BCrypt.HashPassword(userToSave.Password);
+                var userToSave = new User
+                {
+                    Name = request.Name,
+                    Location = request.Location,
+                    Role = request.Role,
+                    Email = request.Email,
+                    Password = BCrypt.Net.BCrypt.HashPassword(request.Password),
+                };
+               
                 dbContext.Users.Add(userToSave);
                 await dbContext.SaveChangesAsync();
 
-                return true;
+                return userToSave;
             }
             catch (DbUpdateException)
             {
-                return false;
-            }
+                throw;
+            }    
         }
 
-        public async Task<bool> UpdateAsync(Guid id, UserUpdateRequest request)
+        public async Task<User> UpdateAsync(Guid id, UserRequest request)
         {
             var user = await GetByIdAsync(id);
-            
 
-            if (user == null)
-            {
-                return false;
-            }
 
             if (request.Name != null)
             {
@@ -83,7 +86,7 @@ namespace backend.Service
                 var emailExists = await ExistsByEmailAsync(request.Email);
                 if (emailExists)
                 {
-                    return false;
+                    throw new ResourceConflictException($"User with email {request.Email} already exists");
                 }
 
                 user.Email = request.Email;
@@ -92,11 +95,6 @@ namespace backend.Service
             if (request.Password != null)
             {
                 user.Password = request.Password;
-            }
-
-            if (!request.Devices.IsNullOrEmpty())
-            {
-                user.Devices = request.Devices;
             }
 
             if ( request.Location != null)
@@ -112,7 +110,7 @@ namespace backend.Service
             dbContext.Users.Update(user);
             await dbContext.SaveChangesAsync();
 
-            return true;
+            return user;
         }
 
         public async Task<bool> ExistsByEmailAsync(string email)

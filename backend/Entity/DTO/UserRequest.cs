@@ -1,14 +1,13 @@
-﻿namespace backend.Entity
+﻿namespace backend.Entity.DTO
 {
-    public class UserUpdateRequest
+    public class UserRequest
     {
         public string? Name { get; set; }
         public string? Role { get; set; }
         public string? Location { get; set; }
         public string? Email { get; set; }
         public string? Password { get; set; }
-        public ICollection<Device> Devices { get; set; } = new List<Device>();
 
-        public UserUpdateRequest() { }
+        public UserRequest() { }
     }
 }

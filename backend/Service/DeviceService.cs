@@ -1,4 +1,6 @@
 ﻿using backend.Entity;
+using backend.Entity.DTO;
+using backend.Entity.Exceptions;
 using backend.Repository;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,17 +14,11 @@ namespace backend.Service
         {
             dbContext = context;
         }
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            var device = await dbContext.Devices.FirstOrDefaultAsync(d => d.Id == id);
-            if (device == null)
-            {
-                return false;
-            }
+            var device = await GetByIdAsync(id);
             dbContext.Devices.Remove(device);
             await dbContext.SaveChangesAsync();
-
-            return true;
         }
 
         public async Task<List<Device>> GetAllAsync()
@@ -30,119 +26,136 @@ namespace backend.Service
             return await dbContext.Devices.ToListAsync();
         }
 
-        public async Task<Device?> GetByIdAsync(Guid id)
+        public async Task<Device> GetByIdAsync(Guid id)
         {
-            return await dbContext.Devices.FirstOrDefaultAsync(d => d.Id == id);
+            var device = await dbContext.Devices.FirstOrDefaultAsync(d => d.Id == id);
+            if (device == null)
+            {
+                throw new EntityNotFoundException($"Device with id {id} not found");
+            }
+
+            return device;
         }
 
-        public async Task SaveAsync(DeviceRequest deviceToSave)
+        public async Task<Device> SaveAsync(DeviceRequest deviceRequest)
         {
-            if (!Enum.TryParse<DeviceType>(deviceToSave.DeviceType, true, out var deviceType))
+            if (!Enum.TryParse<DeviceType>(deviceRequest.DeviceType, true, out var deviceType))
             {
                 throw new ArgumentException("Invalid device type. Should be Phone or Tablet");
             }
             var device = new Device 
             { 
-                Name = deviceToSave.Name,
-                Manufacturer = deviceToSave.Manufacturer,
-                DeviceType = Enum.Parse<DeviceType>(deviceToSave.DeviceType!),
-                OS = deviceToSave.OS,
-                OSVersion = deviceToSave.OSVersion,
-                Processor = deviceToSave.Processor,
-                RamAmount = deviceToSave.RamAmount ?? 0,
-                Description = deviceToSave.Description,
-                UserId = deviceToSave.UserId
+                Name = deviceRequest.Name,
+                Manufacturer = deviceRequest.Manufacturer,
+                DeviceType = Enum.Parse<DeviceType>(deviceRequest.DeviceType!),
+                OS = deviceRequest.OS,
+                OSVersion = deviceRequest.OSVersion,
+                Processor = deviceRequest.Processor,
+                RamAmount = deviceRequest.RamAmount ?? 0,
+                Description = deviceRequest.Description,
+                UserId = deviceRequest.UserId
             };
 
             dbContext.Devices.Add(device);
             await dbContext.SaveChangesAsync();
+
+            return device;
         }
 
-        public async Task<bool> UpdateDetailsAsync(Guid id, DeviceRequest device)
+        public async Task<Device> UpdateDetailsAsync(Guid id, DeviceRequest deviceRequest)
         {
-            var deviceToUpdate = await dbContext.Devices.FirstOrDefaultAsync(d => d.Id == id);
-            if (deviceToUpdate == null)
+            var deviceToUpdate = await GetByIdAsync(id);
+
+            if (deviceRequest.Manufacturer != null)
             {
-                return false;
+                deviceToUpdate.Manufacturer = deviceRequest.Manufacturer;
             }
 
-            if (device.Manufacturer != null)
+            if (deviceRequest.OSVersion != null)
             {
-                deviceToUpdate.Manufacturer = device.Manufacturer;
+                deviceToUpdate.OSVersion = deviceRequest.OSVersion;
             }
 
-            if (device.OSVersion != null)
+            if (deviceRequest.Processor != null)
             {
-                deviceToUpdate.OSVersion = device.OSVersion;
+                deviceToUpdate.Processor = deviceRequest.Processor;
             }
 
-            if (device.Processor != null)
+            if (deviceRequest.Name != null)
             {
-                deviceToUpdate.Processor = device.Processor;
+                deviceToUpdate.Name = deviceRequest.Name;
             }
 
-            if (device.Name != null)
+            if (deviceRequest.Description != null)
             {
-                deviceToUpdate.Name = device.Name;
+                deviceToUpdate.Description = deviceRequest.Description;
             }
 
-            if (device.Description != null)
+            if(deviceRequest.RamAmount != null)
             {
-                deviceToUpdate.Description = device.Description;
-            }
-
-            if(device.RamAmount != null)
-            {
-                deviceToUpdate.RamAmount = device.RamAmount;
+                deviceToUpdate.RamAmount = deviceRequest.RamAmount;
             }
 
             dbContext.Devices.Update(deviceToUpdate);
             await dbContext.SaveChangesAsync();
 
-            return true;
+            return deviceToUpdate;
         }
 
         public async Task<List<Device>> GetUserDevicesAsync(Guid userId)
         {
+            var userExists = await dbContext.Users.AnyAsync(u => u.Id == userId);
+
+            if (!userExists)
+            {
+                throw new EntityNotFoundException($"User with id {userId} not found");
+            }
+
             return await dbContext.Devices.Where(d => d.UserId == userId).ToListAsync();
         }
 
-        public async Task<bool> AssignDeviceAsync(Guid deviceId, Guid userId)
+        public async Task<Device> AssignDeviceAsync(Guid deviceId, Guid userId)
         {
-            var device = await dbContext.Devices.FirstOrDefaultAsync(d => d.Id == deviceId);
+            var device = await GetByIdAsync(deviceId);
 
-            if (device == null)
+            var userExists = await dbContext.Users.AnyAsync(u => u.Id == userId);
+
+            if (!userExists)
             {
-                return false;
+                throw new EntityNotFoundException($"User with id {userId} not found");
             }
-                
+
             if (device.UserId != null)
-            { 
-                return false; 
+            {
+                throw new ResourceConflictException("Device is already assigned to a user");
             }
 
             device.UserId = userId;
             await dbContext.SaveChangesAsync();
-            return true;
+            
+            return device;
         }
 
-        public async Task<bool> UnassignDeviceAsync(Guid deviceId, Guid userId)
+        public async Task<Device> UnassignDeviceAsync(Guid deviceId, Guid userId)
         {
-            var device = await dbContext.Devices.FirstOrDefaultAsync(d => d.Id == deviceId);
+            var device = await GetByIdAsync(deviceId);
 
-            if (device == null)
-            { 
-                return false; 
+            var userExists = await dbContext.Users.AnyAsync(u => u.Id == userId);
+
+            if (!userExists)
+            {
+                throw new EntityNotFoundException($"User with id {userId} not found");
             }
 
             if (device.UserId != userId)
-            { 
-                return false; 
+            {
+                throw new ForbiddenAccessException("Cannot unassign a device you do not own");
             }
 
             device.UserId = null;
             await dbContext.SaveChangesAsync();
-            return true;
+            
+            return device;
         }
     }
 }
