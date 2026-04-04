@@ -1,9 +1,10 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { DeviceRender } from "./device-render/device-render";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, DeviceRender],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

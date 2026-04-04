@@ -1,0 +1,21 @@
+<div id="device-container">
+    @if (devices.length === 0) {
+    <p>No devices found</p>
+    }
+    @else {
+    <ul>
+        @for (device of devices; track device.id) {
+        <li>
+            <strong>{{ device.name }}</strong>
+            - {{ device.manufacturer }}
+            - {{ device.deviceType }}
+            @if (device.user) {
+           - {{ device.user.name }} ({{ device.user.email }})
+            } @else {
+           - Unassigned
+            }
+        </li>
+        }
+    </ul>
+    }
+</div>
