@@ -44,9 +44,10 @@ GO
 --devices
 GO
 
+
 IF NOT EXISTS (
     SELECT 1 FROM [dbo].[devices]
-    WHERE [id] = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'
+    WHERE [id] = '11111111-aaaa-bbbb-cccc-111111111111'
 )
 BEGIN
     INSERT INTO [dbo].[devices] (
@@ -55,23 +56,24 @@ BEGIN
         [ram_amount], [description], [user_id]
     )
     VALUES (
-        'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
-        'ThinkPad X1',
-        'Lenovo',
-        1,
-        'Windows',
-        '11',
-        'Intel Core i7',
-        16.00,
-        'Work laptop',
+        '11111111-aaaa-bbbb-cccc-111111111111',
+        'iPhone 15',
+        'Apple',
+        0,
+        'iOS',
+        '17',
+        'A16 Bionic',
+        6.00,
+        'Latest iPhone',
         '11111111-1111-1111-1111-111111111111'
     );
 END
 GO
 
+-- Phone
 IF NOT EXISTS (
     SELECT 1 FROM [dbo].[devices]
-    WHERE [id] = 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'
+    WHERE [id] = '22222222-aaaa-bbbb-cccc-222222222222'
 )
 BEGIN
     INSERT INTO [dbo].[devices] (
@@ -80,23 +82,24 @@ BEGIN
         [ram_amount], [description], [user_id]
     )
     VALUES (
-        'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
-        'MacBook Pro',
-        'Apple',
-        1,
-        'macOS',
-        'Sonoma',
-        'M2',
-        16.00,
-        'Personal laptop',
+        '22222222-aaaa-bbbb-cccc-222222222222',
+        'Galaxy S24',
+        'Samsung',
+        0,
+        'Android',
+        '14',
+        'Exynos 2400',
+        8.00,
+        'Flagship Samsung phone',
         '22222222-2222-2222-2222-222222222222'
     );
 END
 GO
 
+-- Phone
 IF NOT EXISTS (
     SELECT 1 FROM [dbo].[devices]
-    WHERE [id] = 'cccccccc-cccc-cccc-cccc-cccccccccccc'
+    WHERE [id] = '33333333-aaaa-bbbb-cccc-333333333333'
 )
 BEGIN
     INSERT INTO [dbo].[devices] (
@@ -105,16 +108,94 @@ BEGIN
         [ram_amount], [description], [user_id]
     )
     VALUES (
-        'cccccccc-cccc-cccc-cccc-cccccccccccc',
-        'Galaxy S23',
-        'Samsung',
-        2,
+        '33333333-aaaa-bbbb-cccc-333333333333',
+        'Pixel 8 Pro',
+        'Google',
+        0,
         'Android',
         '14',
+        'Tensor G3',
+        12.00,
+        'Google flagship phone',
+        null
+    );
+END
+GO
+
+-- Tablet
+IF NOT EXISTS (
+    SELECT 1 FROM [dbo].[devices]
+    WHERE [id] = '44444444-aaaa-bbbb-cccc-444444444444'
+)
+BEGIN
+    INSERT INTO [dbo].[devices] (
+        [id], [name], [manufacturer], [device_type],
+        [OS], [OS_version], [processor],
+        [ram_amount], [description], [user_id]
+    )
+    VALUES (
+        '44444444-aaaa-bbbb-cccc-444444444444',
+        'iPad Pro',
+        'Apple',
+        1,
+        'iPadOS',
+        '17',
+        'M2',
+        8.00,
+        'High-end tablet',
+        '11111111-1111-1111-1111-111111111111'
+    );
+END
+GO
+
+-- Tablet
+IF NOT EXISTS (
+    SELECT 1 FROM [dbo].[devices]
+    WHERE [id] = '55555555-aaaa-bbbb-cccc-555555555555'
+)
+BEGIN
+    INSERT INTO [dbo].[devices] (
+        [id], [name], [manufacturer], [device_type],
+        [OS], [OS_version], [processor],
+        [ram_amount], [description], [user_id]
+    )
+    VALUES (
+        '55555555-aaaa-bbbb-cccc-555555555555',
+        'Galaxy Tab S9',
+        'Samsung',
+        1,
+        'Android',
+        '13',
         'Snapdragon 8 Gen 2',
         8.00,
-        'Mobile device',
-        '11111111-1111-1111-1111-111111111111'
+        'Samsung premium tablet',
+        '22222222-2222-2222-2222-222222222222'
+    );
+END
+GO
+
+-- Tablet
+IF NOT EXISTS (
+    SELECT 1 FROM [dbo].[devices]
+    WHERE [id] = '66666666-aaaa-bbbb-cccc-666666666666'
+)
+BEGIN
+    INSERT INTO [dbo].[devices] (
+        [id], [name], [manufacturer], [device_type],
+        [OS], [OS_version], [processor],
+        [ram_amount], [description], [user_id]
+    )
+    VALUES (
+        '66666666-aaaa-bbbb-cccc-666666666666',
+        'Lenovo Tab M10',
+        'Lenovo',
+        1,
+        'Android',
+        '12',
+        'MediaTek Helio P22T',
+        4.00,
+        'Budget tablet',
+        null
     );
 END
 GO
