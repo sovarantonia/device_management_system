@@ -23,12 +23,12 @@ namespace backend.Service
 
         public async Task<List<Device>> GetAllAsync()
         {
-            return await dbContext.Devices.ToListAsync();
+            return await dbContext.Devices.Include(d => d.User).ToListAsync();
         }
 
         public async Task<Device> GetByIdAsync(Guid id)
         {
-            var device = await dbContext.Devices.FirstOrDefaultAsync(d => d.Id == id);
+            var device = await dbContext.Devices.Include(d => d.User).FirstOrDefaultAsync(d => d.Id == id);
             if (device == null)
             {
                 throw new EntityNotFoundException($"Device with id {id} not found");
@@ -111,7 +111,7 @@ namespace backend.Service
                 throw new EntityNotFoundException($"User with id {userId} not found");
             }
 
-            return await dbContext.Devices.Where(d => d.UserId == userId).ToListAsync();
+            return await dbContext.Devices.Include(d => d.User).Where(d => d.UserId == userId).ToListAsync();
         }
 
         public async Task<Device> AssignDeviceAsync(Guid deviceId, Guid userId)

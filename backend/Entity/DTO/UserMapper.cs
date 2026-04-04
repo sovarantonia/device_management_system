@@ -11,13 +11,8 @@
                 Location = user.Location,
                 Role = user.Role,
                 Email = user.Email,
-                Devices = user.Devices
-                    .Select(d => new DeviceSummary
-                    {
-                        Id = d.Id,
-                        Name = d.Name
-                    }).ToList()
             };
+                
         }
     }
 }
