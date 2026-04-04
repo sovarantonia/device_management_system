@@ -1,10 +1,19 @@
 using backend.Controllers.filter;
-using backend.Entity;
 using backend.Repository;
 using backend.Service;
 using Microsoft.EntityFrameworkCore;
 
+var myAllowSpecificOrigins = "MyAllowSpecificOrigins";
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: myAllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200");
+        });
+});
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -20,6 +29,8 @@ if (!app.Environment.IsEnvironment("Testing"))
 {
     app.UseHttpsRedirection();
 }
+
+app.UseCors(myAllowSpecificOrigins);
 
 app.UseAuthorization();
 
