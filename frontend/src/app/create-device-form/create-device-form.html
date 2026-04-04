@@ -1,0 +1,33 @@
+<div id="create-device-form">
+    <form [formGroup]="createDeviceForm">
+        <label for="device-name">Device name:</label>
+        <input id="device-name" type="text" formControlName="deviceName" />
+
+        <label for="device-manufacturer">Manufacturer:</label>
+        <input id="device-manufacturer" type="text" formControlName="deviceManufacturer" />
+
+        <label for="device-type">Type:</label>
+        <select name="device-type" id="deviceType">
+            <option value="Phone">Phone</option>
+            <option value="Tablet">Tablet</option>
+        </select>
+
+        <label for="device-os">Operation System (OS):</label>
+        <input id="device-os" type="text" formControlName="deviceOS" />
+
+        <label for="device-os-version">OS version:</label>
+        <input id="device-os-version" type="text" formControlName="deviceOSVersion" />
+
+        <label for="device-processor">Processor:</label>
+        <input id="device-processor" type="text" formControlName="deviceProcessor" />
+
+        <label for="device-ram-amount">RAM Amount:</label>
+        <input id="device-ram-amount" type="text" formControlName="deviceRamAmount" />
+
+        <label for="device-description">Description:</label>
+        <input id="device-description" type="text" formControlName="deviceDescription" />
+
+        <button type="submit" [disabled]="createDeviceForm.invalid" (click)="onSubmit($event)">Submit</button>
+
+    </form>
+</div>

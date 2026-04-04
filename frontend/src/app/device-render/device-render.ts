@@ -31,6 +31,6 @@ export class DeviceRender implements OnInit {
     }
 
     viewDevice(id: string) {
-      this.router.navigate(['/devices', id]);
+      this.router.navigate(['/device', id]);
     }
 }

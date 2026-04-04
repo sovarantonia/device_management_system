@@ -3,20 +3,21 @@
     <p>No devices found</p>
     }
     @else {
-    <ul>
-        @for (device of devices; track device.id) {
-        <li>
-            <strong>{{ device.name }}</strong>
-            - {{ device.manufacturer }}
-            - {{ device.deviceType }}
-            @if (device.user) {
-           - {{ device.user.name }} ({{ device.user.email }})
-            } @else {
-           - Unassigned
-            }
-            <button (click)="viewDevice(device.id)">View details</button>
-        </li>
+
+    @for (device of devices; track device.id)
+
+    {
+    <div id="device-card">
+        <h2>{{ device.name }}</h2>
+        <p> Manufacturer: {{ device.manufacturer }} </p>
+        <p> Device type: {{ device.deviceType }} </p>
+        @if (device.user) {
+        <p> Assigned to: {{ device.user.name }} ({{ device.user.email }}) </p>
+        } @else {
+        <p> Unassigned</p>
         }
-    </ul>
+        <button (click)="viewDevice(device.id)">View details</button>
+    </div>
+    }
     }
 </div>
