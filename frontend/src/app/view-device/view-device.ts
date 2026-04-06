@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DeviceResponse } from '../model/device-response';
 import { DeviceService } from '../service/device/device-service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,10 +9,14 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './view-device.html',
   styleUrl: './view-device.css',
 })
-export class ViewDevice {
+export class ViewDevice implements OnInit {
   device: DeviceResponse | null = null;
-  
+
   constructor(private deviceService: DeviceService, private route: ActivatedRoute, private router: Router) {
+
+  }
+
+  ngOnInit(): void {
     this.getDevice();
   }
 
@@ -30,6 +34,4 @@ export class ViewDevice {
   close() {
     this.router.navigate(['/devices']);
   }
-
-
 }

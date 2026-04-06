@@ -1,5 +1,6 @@
 <div id="device-page">
     <button (click)="onAddDeviceClick()">Add device</button>
-    
-    <app-device-render />
+
+    <app-device-render [devices]="devices" (viewDeviceClicked)="viewDevice($event)"
+        (deleteDeviceClicked)="onDeleteDeviceClick($event)" />
 </div>

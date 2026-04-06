@@ -8,6 +8,8 @@
 
     {
     <div id="device-card">
+        <button (click)="onDeleteClick(device.id)">Delete</button>
+        
         <h2>{{ device.name }}</h2>
         <p> Manufacturer: {{ device.manufacturer }} </p>
         <p> Device type: {{ device.deviceType }} </p>
@@ -16,7 +18,7 @@
         } @else {
         <p> Unassigned</p>
         }
-        <button (click)="viewDevice(device.id)">View details</button>
+        <button (click)="onViewClick(device.id)">View details</button>
     </div>
     }
     }

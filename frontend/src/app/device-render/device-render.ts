@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DeviceService } from '../service/device/device-service';
 import { DeviceResponse } from '../model/device-response';
 import { Router } from '@angular/router';
@@ -9,28 +9,16 @@ import { Router } from '@angular/router';
   templateUrl: './device-render.html',
   styleUrl: './device-render.css',
 })
-export class DeviceRender implements OnInit {
-  devices: DeviceResponse[] = [];
-  private router = inject(Router);
+export class DeviceRender {
+  @Input() devices: DeviceResponse[] = [];
+  @Output() viewDeviceClicked = new EventEmitter<string>();
+  @Output() deleteDeviceClicked = new EventEmitter<string>();
 
-  constructor(private deviceService: DeviceService) { }
-
-  ngOnInit(): void {
-    this.loadDevices();
+  onViewClick(id: string) {
+    this.viewDeviceClicked.emit(id);
   }
 
-  loadDevices(): void {
-    this.deviceService.getAll().subscribe({
-      next: (data) => {
-        this.devices = data;
-      },
-      error: (err) => {
-        console.error('Error loading devices', err);
-      }
-    }) 
-    }
-
-    viewDevice(id: string) {
-      this.router.navigate(['/device', id]);
-    }
+  onDeleteClick(id: string) {
+    this.deleteDeviceClicked.emit(id);
+  }
 }
