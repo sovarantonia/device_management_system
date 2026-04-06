@@ -1,33 +1,84 @@
 <div id="create-device-form">
-    <form [formGroup]="createDeviceForm">
-        <label for="device-name">Device name:</label>
-        <input id="device-name" type="text" formControlName="deviceName" />
+    @if (errorMessage) {
+    <p>{{errorMessage}}</p>
+    }
 
-        <label for="device-manufacturer">Manufacturer:</label>
-        <input id="device-manufacturer" type="text" formControlName="deviceManufacturer" />
+    <form [formGroup]="createDeviceForm" (ngSubmit)="onSubmit($event)">
+        <div class="form-group">
+            <label for="device-name">Device name:</label>
+            <input id="device-name" type="text" formControlName="deviceName" />
+            @if (createDeviceForm.get('deviceName')?.touched && createDeviceForm.get('deviceName')?.invalid) {
+                <p>Name is required</p>
+            }
+        </div>
 
-        <label for="device-type">Type:</label>
-        <select name="device-type" id="deviceType">
-            <option value="Phone">Phone</option>
-            <option value="Tablet">Tablet</option>
-        </select>
+        <div class="form-group">
+            <label for="device-manufacturer">Manufacturer:</label>
+            <input id="device-manufacturer" type="text" formControlName="deviceManufacturer" />
+             @if (createDeviceForm.get('deviceManufacturer')?.touched && createDeviceForm.get('deviceManufacturer')?.invalid) {
+                <p>Manufacturer is required</p>
+            }
+        </div>
 
-        <label for="device-os">Operation System (OS):</label>
-        <input id="device-os" type="text" formControlName="deviceOS" />
+        <div class="form-group">
+            <label for="device-type">Type:</label>
+            <select name="device-type" id="device-type" formControlName="deviceType">
+                <option value="">Select device type</option>
+                <option value="Phone">Phone</option>
+                <option value="Tablet">Tablet</option>
+            </select>
+             @if (createDeviceForm.get('deviceType')?.touched && createDeviceForm.get('deviceType')?.invalid) {
+                <p>Type is required</p>
+            }
+        </div>
 
-        <label for="device-os-version">OS version:</label>
-        <input id="device-os-version" type="text" formControlName="deviceOSVersion" />
+        <div class="form-group">
+            <label for="device-os">Operating System (OS):</label>
+            <input id="device-os" type="text" formControlName="deviceOS" />
+             @if (createDeviceForm.get('deviceOS')?.touched && createDeviceForm.get('deviceOS')?.invalid) {
+                <p>OS is required</p>
+            }
+        </div>
 
-        <label for="device-processor">Processor:</label>
-        <input id="device-processor" type="text" formControlName="deviceProcessor" />
 
-        <label for="device-ram-amount">RAM Amount:</label>
-        <input id="device-ram-amount" type="text" formControlName="deviceRamAmount" />
+        <div class="form-group">
+            <label for="device-os-version">OS version:</label>
+            <input id="device-os-version" type="text" formControlName="deviceOSVersion" />
+             @if (createDeviceForm.get('deviceOSVersion')?.touched && createDeviceForm.get('deviceOSVersion')?.invalid) {
+                <p>OS Version is required</p>
+            }
+        </div>
 
-        <label for="device-description">Description:</label>
-        <input id="device-description" type="text" formControlName="deviceDescription" />
+        <div class="form-group">
+            <label for="device-processor">Processor:</label>
+            <input id="device-processor" type="text" formControlName="deviceProcessor" />
+             @if (createDeviceForm.get('deviceProcessor')?.touched && createDeviceForm.get('deviceProcessor')?.invalid) {
+                <p>Processor is required</p>
+            }
+        </div>
 
-        <button type="submit" [disabled]="createDeviceForm.invalid" (click)="onSubmit($event)">Submit</button>
+        <div class="form-group">
+
+            <label for="device-ram-amount">RAM Amount:</label>
+            <input id="device-ram-amount" type="text" formControlName="deviceRamAmount" />
+             @if (createDeviceForm.get('deviceRamAmount')?.touched && createDeviceForm.get('deviceRamAmount')?.invalid) {
+                <p>RAM amount is required</p>
+            }
+        </div>
+
+        <div class="form-group">
+            <label for="device-description">Description:</label>
+            <input id="device-description" type="text" formControlName="deviceDescription" />
+             @if (createDeviceForm.get('deviceDescription')?.touched && createDeviceForm.get('deviceDescription')?.invalid) {
+                <p>NDescription is required</p>
+            }
+        </div>
+
+
+        <div class="form-group">
+            <button type="submit" [disabled]="createDeviceForm.invalid">Submit</button>
+        </div>
+
 
     </form>
 </div>

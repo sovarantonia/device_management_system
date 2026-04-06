@@ -7,5 +7,5 @@ export interface DeviceRequest {
     processor: string;
     ramAmount: number;
     description: string;
-    userId: string;
+    userId?: string | null;
 }
