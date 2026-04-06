@@ -37,14 +37,32 @@ namespace backend.Service
             return device;
         }
 
+
         public async Task<Device> SaveAsync(DeviceRequest deviceRequest)
         {
             if (!Enum.TryParse<DeviceType>(deviceRequest.DeviceType, true, out var deviceType))
             {
                 throw new ArgumentException("Invalid device type. Should be Phone or Tablet");
             }
-            var device = new Device 
-            { 
+
+            var exists = await dbContext.Devices.AnyAsync(d =>
+                d.Name == deviceRequest.Name &&
+                d.Manufacturer == deviceRequest.Manufacturer &&
+                d.DeviceType == Enum.Parse<DeviceType>(deviceRequest.DeviceType!) &&
+                d.OS == deviceRequest.OS &&
+                d.OSVersion == deviceRequest.OSVersion &&
+                d.Processor == deviceRequest.Processor &&
+                d.RamAmount == deviceRequest.RamAmount
+            );
+
+
+            if (exists)
+            {
+                throw new ResourceConflictException("A device with the same details already exists.");
+            }
+
+            var device = new Device
+            {
                 Name = deviceRequest.Name,
                 Manufacturer = deviceRequest.Manufacturer,
                 DeviceType = Enum.Parse<DeviceType>(deviceRequest.DeviceType!),
@@ -64,6 +82,28 @@ namespace backend.Service
 
         public async Task<Device> UpdateDetailsAsync(Guid id, DeviceRequest deviceRequest)
         {
+            if (!Enum.TryParse<DeviceType>(deviceRequest.DeviceType, true, out var deviceType))
+            {
+                throw new ArgumentException("Invalid device type. Should be Phone or Tablet");
+            }
+
+            var exists = await dbContext.Devices.AnyAsync(d =>
+                d.Id != id &&
+                d.Name == deviceRequest.Name &&
+                d.Manufacturer == deviceRequest.Manufacturer &&
+                d.DeviceType == Enum.Parse<DeviceType>(deviceRequest.DeviceType!) &&
+                d.OS == deviceRequest.OS &&
+                d.OSVersion == deviceRequest.OSVersion &&
+                d.Processor == deviceRequest.Processor &&
+                d.RamAmount == deviceRequest.RamAmount
+            );
+
+
+            if (exists)
+            {
+                throw new ResourceConflictException("A device with the same details already exists.");
+            }
+
             var deviceToUpdate = await GetByIdAsync(id);
 
             if (deviceRequest.Manufacturer != null)
@@ -91,7 +131,7 @@ namespace backend.Service
                 deviceToUpdate.Description = deviceRequest.Description;
             }
 
-            if(deviceRequest.RamAmount != null)
+            if (deviceRequest.RamAmount != null)
             {
                 deviceToUpdate.RamAmount = deviceRequest.RamAmount;
             }
@@ -132,7 +172,7 @@ namespace backend.Service
 
             device.UserId = userId;
             await dbContext.SaveChangesAsync();
-            
+
             return device;
         }
 
@@ -154,7 +194,7 @@ namespace backend.Service
 
             device.UserId = null;
             await dbContext.SaveChangesAsync();
-            
+
             return device;
         }
     }
