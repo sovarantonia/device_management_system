@@ -21,6 +21,7 @@
                     Name = device.User.Name,
                     Email = device.User.Email,
                     Location = device.User.Location,
+                    Role = device.User.Role,
                 }
             };
         }
