@@ -15,11 +15,12 @@
                 Processor = device.Processor,
                 RamAmount = device.RamAmount,
                 Description = device.Description,
-                User = device.User == null ? null : new UserSummary
+                User = device.User == null ? null : new UserResponse
                 {
                     Id = device.User.Id,
                     Name = device.User.Name,
-                    Email = device.User.Email
+                    Email = device.User.Email,
+                    Location = device.User.Location,
                 }
             };
         }
