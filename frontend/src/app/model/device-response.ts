@@ -1,4 +1,4 @@
-import { UserSummary } from "./user-summary";
+import { UserResponse } from "./user-response";
 
 export interface DeviceResponse {
     id: string;
@@ -10,5 +10,5 @@ export interface DeviceResponse {
     processor: string;
     ramAmount: number;
     description: string;
-    user: UserSummary | null;
+    user: UserResponse | null;
 }

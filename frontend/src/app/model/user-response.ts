@@ -6,5 +6,5 @@ export interface UserResponse {
     role: string,
     email: string,
     location: string,
-    devices: DeviceSummary[],
+    // devices: DeviceSummary[],
 }

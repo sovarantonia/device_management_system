@@ -1,12 +1,10 @@
 import { Routes } from '@angular/router';
-import { DeviceRender } from './device-render/device-render';
 import { ViewDevice } from './view-device/view-device';
-import { CreateDeviceForm } from './create-device-form/create-device-form';
+import { CreateDevice } from './create-device/create-device';
 import { DevicePage } from './device-page/device-page';
 
 export const routes: Routes = [
     { path: 'devices', component: DevicePage },
-    { path: 'device/new', component: CreateDeviceForm },
+    { path: 'device/new', component: CreateDevice },
     { path: 'device/:id', component: ViewDevice },
-    
 ];

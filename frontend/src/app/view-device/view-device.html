@@ -1,22 +1,8 @@
 <div id="viewDevice">
-    <ul>
-        <li>
-            <button (click)="close()">Close</button>
-            Name: {{device?.name}}
-            Type: {{device?.deviceType}}
-            Manufacturer: {{device?.manufacturer}}
-            Description: {{device?.description}}
-            OS: {{device?.os}}
-            Version: {{device?.osVersion}}
-            Processor: {{device?.processor}}
-            Ram amount: {{device?.ramAmount}}
-            Owned by:
-            @if (device?.user) {
-                {{device?.user?.name}} ({{device?.user?.email}})
-            }
-            @else {
-                -
-            }
-        </li>
-    </ul>
+    <app-device-form [initialData]="device" (formSubmitted)="updateDetails($event)" />
+    @if (device?.user) {
+    <p> Assigned to: {{ device?.user?.name }} ({{ device?.user?.email }}) </p>
+    } @else {
+    <p> Unassigned</p>
+    }
 </div>
