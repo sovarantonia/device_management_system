@@ -1,5 +1,55 @@
+#device-form {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    padding: 0 16px;
+}
+
+form {
+    width: 100%;
+}
+
 .form-group {
     display: grid;
-    gap: 15px;
-    grid-column: auto auto;
+    grid-template-columns: 150px 1fr;
+    align-items: start;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.form-group p {
+    grid-column: 2;
+    margin: 0;
+    color: red;
+    font-size: 12px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+
+#device-form>button {
+    align-self: flex-end;
+    margin-bottom: 16px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+textarea {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+    font-family: inherit;
 }

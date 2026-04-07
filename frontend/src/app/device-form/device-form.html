@@ -2,7 +2,7 @@
     <!-- @if (errorMessage) {
     <p>{{errorMessage}}</p>
     } -->
-
+    <h2>{{formTitle}}</h2>
     <button (click)="close()">Close</button>
 
     <form [formGroup]="deviceForm" (ngSubmit)="onSubmit()">
@@ -10,15 +10,15 @@
             <label for="device-name">Device name:</label>
             <input id="device-name" type="text" formControlName="deviceName" />
             @if (deviceForm.get('deviceName')?.touched && deviceForm.get('deviceName')?.invalid) {
-                <p>Name is required</p>
+            <p>Name is required</p>
             }
         </div>
 
         <div class="form-group">
             <label for="device-manufacturer">Manufacturer:</label>
             <input id="device-manufacturer" type="text" formControlName="deviceManufacturer" />
-             @if (deviceForm.get('deviceManufacturer')?.touched && deviceForm.get('deviceManufacturer')?.invalid) {
-                <p>Manufacturer is required</p>
+            @if (deviceForm.get('deviceManufacturer')?.touched && deviceForm.get('deviceManufacturer')?.invalid) {
+            <p>Manufacturer is required</p>
             }
         </div>
 
@@ -29,16 +29,16 @@
                 <option value="Phone">Phone</option>
                 <option value="Tablet">Tablet</option>
             </select>
-             @if (deviceForm.get('deviceType')?.touched && deviceForm.get('deviceType')?.invalid) {
-                <p>Type is required</p>
+            @if (deviceForm.get('deviceType')?.touched && deviceForm.get('deviceType')?.invalid) {
+            <p>Type is required</p>
             }
         </div>
 
         <div class="form-group">
             <label for="device-os">Operating System (OS):</label>
             <input id="device-os" type="text" formControlName="deviceOS" />
-             @if (deviceForm.get('deviceOS')?.touched && deviceForm.get('deviceOS')?.invalid) {
-                <p>OS is required</p>
+            @if (deviceForm.get('deviceOS')?.touched && deviceForm.get('deviceOS')?.invalid) {
+            <p>OS is required</p>
             }
         </div>
 
@@ -46,16 +46,16 @@
         <div class="form-group">
             <label for="device-os-version">OS version:</label>
             <input id="device-os-version" type="text" formControlName="deviceOSVersion" />
-             @if (deviceForm.get('deviceOSVersion')?.touched && deviceForm.get('deviceOSVersion')?.invalid) {
-                <p>OS Version is required</p>
+            @if (deviceForm.get('deviceOSVersion')?.touched && deviceForm.get('deviceOSVersion')?.invalid) {
+            <p>OS Version is required</p>
             }
         </div>
 
         <div class="form-group">
             <label for="device-processor">Processor:</label>
             <input id="device-processor" type="text" formControlName="deviceProcessor" />
-             @if (deviceForm.get('deviceProcessor')?.touched && deviceForm.get('deviceProcessor')?.invalid) {
-                <p>Processor is required</p>
+            @if (deviceForm.get('deviceProcessor')?.touched && deviceForm.get('deviceProcessor')?.invalid) {
+            <p>Processor is required</p>
             }
         </div>
 
@@ -63,20 +63,20 @@
 
             <label for="device-ram-amount">RAM Amount:</label>
             <input id="device-ram-amount" type="text" formControlName="deviceRamAmount" />
-             @if (deviceForm.get('deviceRamAmount')?.touched && deviceForm.get('deviceRamAmount')?.invalid) {
-                <p>RAM amount is required</p>
+            @if (deviceForm.get('deviceRamAmount')?.touched && deviceForm.get('deviceRamAmount')?.invalid) {
+            <p>RAM amount is required</p>
             }
         </div>
 
         <div class="form-group">
             <label for="device-description">Description:</label>
-            <input id="device-description" type="text" formControlName="deviceDescription" />
-             @if (deviceForm.get('deviceDescription')?.touched && deviceForm.get('deviceDescription')?.invalid) {
-                <p>Description is required</p>
+            <textarea id="device-description" formControlName="deviceDescription" rows="4"></textarea>
+            @if (deviceForm.get('deviceDescription')?.touched && deviceForm.get('deviceDescription')?.invalid) {
+            <p>Description is required</p>
             }
         </div>
 
-        <div class="form-group">
+        <div class="form-actions">
             <button type="submit" [disabled]="deviceForm.invalid">Submit</button>
         </div>
 

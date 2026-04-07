@@ -1,1 +1,3 @@
-<app-device-form [initialData]="null" (formSubmitted)="save($event)" />
+<div class="create-device">
+    <app-device-form [initialData]="null" (formSubmitted)="save($event)" [formTitle]="formTitle" />
+</div>

@@ -1,8 +1,28 @@
 <div id="viewDevice">
-    <app-device-form [initialData]="device" (formSubmitted)="updateDetails($event)" />
-    @if (device?.user) {
-    <p> Assigned to: {{ device?.user?.name }} ({{ device?.user?.email }}) </p>
-    } @else {
-    <p> Unassigned</p>
-    }
+    <div class="device-main">
+        <app-device-form [initialData]="device" (formSubmitted)="updateDetails($event)" [formTitle]="formTitle" />
+    </div>
+
+    <div class="device-sidebar">
+        <div class="device-user">
+            <h3>User details</h3>
+            @if (device?.user) {
+                
+            <p> Assigned to: </p>
+            <ul>
+                <li>{{ device?.user?.name }} ({{ device?.user?.email }})</li>
+                <li>Role: {{device?.user?.role }}</li>
+                <li>Location: {{device?.user?.location}}</li>
+            </ul>
+            } @else {
+            <p> Unassigned</p>
+            }
+        </div>
+
+        <div class="device-actions">
+            <h3>Options</h3>
+        </div>
+    </div>
+
+
 </div>

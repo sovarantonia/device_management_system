@@ -11,6 +11,7 @@ import { DeviceForm } from "../device-form/device-form";
   styleUrl: './create-device.css',
 })
 export class CreateDevice {
+  formTitle = "Add new device";
 
   constructor(private deviceService: DeviceService, private router: Router) {}
 

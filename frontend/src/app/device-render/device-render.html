@@ -7,9 +7,10 @@
     @for (device of devices; track device.id)
 
     {
-    <div id="device-card">
-        <button (click)="onDeleteClick(device.id)">Delete</button>
-        
+    <div class="card">
+
+        <button (click)="onDeleteClick(device.id)" class="delete-btn" title="Delete">&#x2716;</button>
+
         <h2>{{ device.name }}</h2>
         <p> Manufacturer: {{ device.manufacturer }} </p>
         <p> Device type: {{ device.deviceType }} </p>
@@ -19,6 +20,7 @@
         <p> Unassigned</p>
         }
         <button (click)="onViewClick(device.id)">View details</button>
+
     </div>
     }
     }

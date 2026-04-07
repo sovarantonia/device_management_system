@@ -1,19 +1,23 @@
 #device-container {
     display: grid;
     gap: 15px;
-}
-#device-card {
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 15px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
-  grid-area: auto;
-  max-width: 500px;
-  width: 100%;
-  overflow-wrap: break-word;
+    grid-template: 1fr 1fr;
 }
 
-#device-card:hover {
-  transform: translateY(-5px);
+
+.delete-btn {
+  font-size: 25px;
+  border: none;
+  background-color: transparent;
+  color: rgb(170, 54, 54);
+  transition-duration: 0.2s;
+
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.delete-btn:hover {
+  color: rgb(202, 32, 32);
+  background-color: transparent;
 }

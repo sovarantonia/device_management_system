@@ -1,1 +1,39 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+  box-sizing: border-box;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  max-width: 500px;
+  width: 100%;
+  overflow-wrap: break-word;
+
+  display: flex;
+  flex-direction: column;
+  position: relative; 
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+button {
+  border-radius: 4px;
+  border-width: 1px;
+  border: 1px solid #718fb1;
+  width: 110px;
+  transition-duration: 0.3s;
+  background-color: #99bce4;
+  font-family: " Open Sans ", sans-serif;
+  padding: 5px 5px 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #718fb1;
+  box-shadow: 5px 5px 5px gray;
+}

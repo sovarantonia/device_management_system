@@ -16,6 +16,7 @@ export class ViewDevice implements OnInit {
   device: DeviceResponse | null = null;
   errorMessage = '';
   id: string | null = null;
+  formTitle = "Edit device";
 
   constructor(private deviceService: DeviceService, private route: ActivatedRoute, private router: Router) {
     this.id = this.route.snapshot.paramMap.get('id');

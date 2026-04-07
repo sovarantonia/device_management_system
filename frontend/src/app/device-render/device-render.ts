@@ -1,7 +1,5 @@
 import { Component, inject, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { DeviceService } from '../service/device/device-service';
 import { DeviceResponse } from '../model/device-response';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-device-render',

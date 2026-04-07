@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 })
 export class DeviceForm implements OnInit, OnChanges {
   @Input() initialData: DeviceResponse | null = null;
+  @Input() formTitle: string | null = null;
   @Output() formSubmitted = new EventEmitter<DeviceRequest>();
 
   deviceForm!: FormGroup;
@@ -29,8 +30,6 @@ export class DeviceForm implements OnInit, OnChanges {
       deviceRamAmount: [0, [Validators.required, Validators.min(0)]],
       deviceDescription: ['', Validators.required],
     })
-
-    
   }
 
   ngOnChanges(changes: SimpleChanges): void {

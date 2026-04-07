@@ -1,0 +1,54 @@
+#viewDevice {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.device-main {
+  min-width: 0;
+}
+
+.device-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.device-user,
+.device-actions {
+  background: #fff;
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.device-user p {
+  margin: 0;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+
+.device-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.device-actions button {
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  #viewDevice {
+    grid-template-columns: 1fr;
+  }
+
+  .device-sidebar {
+    order: 2;
+  }
+
+  .device-main {
+    order: 1;
+  }
+}

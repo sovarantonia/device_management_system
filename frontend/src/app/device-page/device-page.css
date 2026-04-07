@@ -1,0 +1,4 @@
+#device-page {
+    display: grid;
+    gap: 15px;
+}
