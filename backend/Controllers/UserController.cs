@@ -32,13 +32,13 @@ namespace backend.Controllers
             return Ok(users.Select(u => UserMapper.ToDTO(u)));
         }
 
-        [HttpPost("register")]
-        public async Task<IActionResult> SaveUser([FromBody] UserRequest request)
-        {
-            var user = await userService.RegisterAsync(request);
+        //[HttpPost("register")]
+        //public async Task<IActionResult> SaveUser([FromBody] UserRequest request)
+        //{
+        //    var user = await userService.RegisterAsync(request);
 
-            return Ok(user);
-        }
+        //    return Ok(user);
+        //}
 
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteUser(Guid id)

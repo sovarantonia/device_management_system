@@ -65,12 +65,13 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IDeviceService, DeviceService>();
 
-
-builder.Services.AddControllers(options => { options.Filters.Add<ExceptionFilter>(); });
-
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
+app.UseMiddleware<ExceptionMiddleware>();
+
+UserRegister.MapEndpoint(app);
 LoginUser.MapEndpoint(app);
 
 if (!app.Environment.IsEnvironment("Testing"))

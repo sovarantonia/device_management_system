@@ -1,11 +1,13 @@
 ﻿using backend.Entity.DTO;
 using backend.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
     public class DeviceController : ControllerBase
     {
         private readonly IDeviceService deviceService;
