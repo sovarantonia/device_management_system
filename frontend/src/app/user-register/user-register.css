@@ -1,0 +1,13 @@
+#user-register {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    padding: 0 16px;
+    justify-content: center;
+}
+
+#user-register>button {
+    align-self: flex-end;
+    margin-bottom: 16px;
+}
