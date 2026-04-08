@@ -1,6 +1,6 @@
-using backend.Controllers;
-using backend.Controllers.filter;
 using backend.Entity;
+using backend.Helper;
+using backend.Helper.middleware;
 using backend.Repository;
 using backend.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -70,9 +70,6 @@ builder.Services.AddControllers();
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
-
-UserRegister.MapEndpoint(app);
-LoginUser.MapEndpoint(app);
 
 if (!app.Environment.IsEnvironment("Testing"))
 {

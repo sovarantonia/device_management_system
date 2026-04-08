@@ -1,6 +1,6 @@
 ﻿using backend.Entity.Exceptions;
 
-namespace backend.Controllers.filter
+namespace backend.Helper.middleware
 {
     public class ExceptionMiddleware
     {

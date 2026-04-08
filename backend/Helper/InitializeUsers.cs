@@ -1,7 +1,7 @@
 ﻿using backend.Entity;
 using Microsoft.AspNetCore.Identity;
 
-namespace backend.Repository
+namespace backend.Helper
 {
     public static class InitializeUsers
     {
