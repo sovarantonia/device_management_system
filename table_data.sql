@@ -4,39 +4,97 @@ USE device_management;
 GO
 
 IF NOT EXISTS (
-    SELECT 1 FROM [dbo].[users]
+    SELECT 1 FROM [dbo].[AspNetUsers]
     WHERE [id] = '11111111-1111-1111-1111-111111111111'
 )
 BEGIN
-    INSERT INTO [dbo].[users] (
-        [id], [name], [role], [location], [email], [password]
+    INSERT INTO [dbo].[AspNetUsers] (
+        [Id],
+        [UserName],
+        [NormalizedUserName],
+        [Email],
+        [NormalizedEmail],
+        [EmailConfirmed],
+        [PasswordHash],
+        [SecurityStamp],
+        [ConcurrencyStamp],
+        [PhoneNumber],
+        [PhoneNumberConfirmed],
+        [TwoFactorEnabled],
+        [LockoutEnd],
+        [LockoutEnabled],
+        [AccessFailedCount],
+        [Name],
+        [Role],
+        [Location]
     )
     VALUES (
         '11111111-1111-1111-1111-111111111111',
+        'alice@example.com',
+        'ALICE@EXAMPLE.COM',
+        'alice@example.com',
+        'ALICE@EXAMPLE.COM',
+        1,
+        NULL,
+        NEWID(),
+        NEWID(),
+        NULL,
+        0,
+        0,
+        NULL,
+        1,
+        0,
         'Alice Johnson',
         'Admin',
-        'Cluj',
-        'alice@example.com',
-        '$2a$12$Gti3zVFbWup/77sR3sCk6uQXCtCUEfyVnHjfQcLyn9u6hDQiMSMPC' --test123
+        'Cluj'
     );
 END
 GO
 
 IF NOT EXISTS (
-    SELECT 1 FROM [dbo].[users]
+    SELECT 1 FROM [dbo].[AspNetUsers]
     WHERE [id] = '22222222-2222-2222-2222-222222222222'
 )
 BEGIN
-    INSERT INTO [dbo].[users] (
-        [id], [name], [role], [location], [email], [password]
+    INSERT INTO [dbo].[AspNetUsers] (
+        [Id],
+        [UserName],
+        [NormalizedUserName],
+        [Email],
+        [NormalizedEmail],
+        [EmailConfirmed],
+        [PasswordHash],
+        [SecurityStamp],
+        [ConcurrencyStamp],
+        [PhoneNumber],
+        [PhoneNumberConfirmed],
+        [TwoFactorEnabled],
+        [LockoutEnd],
+        [LockoutEnabled],
+        [AccessFailedCount],
+        [Name],
+        [Role],
+        [Location]
     )
     VALUES (
         '22222222-2222-2222-2222-222222222222',
+        'bob@example.com',
+        'BOB@EXAMPLE.COM',
+        'bob@example.com',
+        'BOB@EXAMPLE.COM',
+        1,
+        NULL,
+        NEWID(),
+        NEWID(),
+        NULL,
+        0,
+        0,
+        NULL,
+        1,
+        0,
         'Bob Smith',
         'User',
-        'Bucharest',
-        'bob@example.com',
-        '$2a$12$3URV9aP5CZmdiAFbyvusluqL6LtytH7pueoLy6QCdZDsA207lueMK' --test123
+        'Bucharest'
     );
 END
 GO

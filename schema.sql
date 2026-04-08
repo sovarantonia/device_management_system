@@ -10,24 +10,64 @@ GO
 IF NOT EXISTS (
     SELECT 1
     FROM sys.tables
-    WHERE name = 'users'
+    WHERE name = 'AspNetUsers'
       AND schema_id = SCHEMA_ID('dbo')
 )
 BEGIN
-    CREATE TABLE [dbo].[users](
-        [id] UNIQUEIDENTIFIER NOT NULL DEFAULT NEWSEQUENTIALID(),
-        [name] VARCHAR(50) NULL,
-        [role] VARCHAR(50) NULL,
-        [location] VARCHAR(50) NULL,
-        [email] VARCHAR(50) NOT NULL,
-        [password] VARCHAR(255) NULL,
+    CREATE TABLE [dbo].[AspNetUsers](
+        [Id] NVARCHAR(450) NOT NULL,
 
-        CONSTRAINT [PK_users] PRIMARY KEY CLUSTERED ([id] ASC),
+        [UserName] NVARCHAR(256) NULL,
+        [NormalizedUserName] NVARCHAR(256) NULL,
 
-        CONSTRAINT [uc_email] UNIQUE NONCLUSTERED ([email] ASC)
+        [Email] NVARCHAR(256) NULL,
+        [NormalizedEmail] NVARCHAR(256) NULL,
+        [EmailConfirmed] BIT NOT NULL DEFAULT 0,
+
+        [PasswordHash] NVARCHAR(MAX) NULL,
+        [SecurityStamp] NVARCHAR(MAX) NULL,
+        [ConcurrencyStamp] NVARCHAR(MAX) NULL,
+
+        [PhoneNumber] NVARCHAR(MAX) NULL,
+        [PhoneNumberConfirmed] BIT NOT NULL DEFAULT 0,
+
+        [TwoFactorEnabled] BIT NOT NULL DEFAULT 0,
+        [LockoutEnd] DATETIMEOFFSET NULL,
+        [LockoutEnabled] BIT NOT NULL DEFAULT 1,
+        [AccessFailedCount] INT NOT NULL DEFAULT 0,
+
+        [Name] VARCHAR(50) NULL,
+        [Role] VARCHAR(50) NULL,
+        [Location] VARCHAR(50) NULL,
+
+        CONSTRAINT [PK_AspNetUsers] PRIMARY KEY CLUSTERED ([Id] ASC)
     );
 END
 GO
+
+IF NOT EXISTS (
+    SELECT 1 FROM sys.indexes
+    WHERE name = 'UserNameIndex'
+)
+BEGIN
+    CREATE UNIQUE INDEX [UserNameIndex]
+    ON [dbo].[AspNetUsers] ([NormalizedUserName])
+    WHERE [NormalizedUserName] IS NOT NULL;
+END
+GO
+
+IF NOT EXISTS (
+    SELECT 1 FROM sys.indexes
+    WHERE name = 'EmailIndex'
+)
+BEGIN
+    CREATE UNIQUE INDEX [EmailIndex]
+    ON [dbo].[AspNetUsers] ([NormalizedEmail])
+    WHERE [NormalizedEmail] IS NOT NULL;
+END
+GO
+
+--devices
 
 IF NOT EXISTS (
     SELECT 1
@@ -46,7 +86,7 @@ BEGIN
         [processor] VARCHAR(50) NULL,
         [ram_amount] DECIMAL(10,2) NULL,
         [description] VARCHAR(50) NULL,
-        [user_id] UNIQUEIDENTIFIER NULL,
+        [user_id] NVARCHAR(450) NULL,
         CONSTRAINT [PK_devices] PRIMARY KEY CLUSTERED ([id] ASC)
     );
 END
@@ -60,7 +100,7 @@ IF NOT EXISTS (
 BEGIN
     ALTER TABLE [dbo].[devices]
     ADD CONSTRAINT [FK_devices_users]
-    FOREIGN KEY ([user_id]) REFERENCES [dbo].[users]([id]);
+    FOREIGN KEY ([user_id]) REFERENCES [dbo].[AspNetUsers]([id]);
 END
 GO
 
@@ -82,19 +122,58 @@ IF NOT EXISTS (
       AND schema_id = SCHEMA_ID('dbo')
 )
 BEGIN
-    CREATE TABLE [dbo].[users](
-        [id] UNIQUEIDENTIFIER NOT NULL DEFAULT NEWSEQUENTIALID(),
-        [name] VARCHAR(50) NULL,
-        [role] VARCHAR(50) NULL,
-        [location] VARCHAR(50) NULL,
-        [email] VARCHAR(50) NOT NULL,
-        [password] VARCHAR(255) NULL,
+    CREATE TABLE [dbo].[AspNetUsers](
+        [Id] NVARCHAR(450) NOT NULL,
 
-        CONSTRAINT [PK_users] PRIMARY KEY CLUSTERED ([id] ASC),
+        [UserName] NVARCHAR(256) NULL,
+        [NormalizedUserName] NVARCHAR(256) NULL,
 
-        CONSTRAINT [uc_email] UNIQUE NONCLUSTERED ([email] ASC)
+        [Email] NVARCHAR(256) NULL,
+        [NormalizedEmail] NVARCHAR(256) NULL,
+        [EmailConfirmed] BIT NOT NULL DEFAULT 0,
+
+        [PasswordHash] NVARCHAR(MAX) NULL,
+        [SecurityStamp] NVARCHAR(MAX) NULL,
+        [ConcurrencyStamp] NVARCHAR(MAX) NULL,
+
+        [PhoneNumber] NVARCHAR(MAX) NULL,
+        [PhoneNumberConfirmed] BIT NOT NULL DEFAULT 0,
+
+        [TwoFactorEnabled] BIT NOT NULL DEFAULT 0,
+        [LockoutEnd] DATETIMEOFFSET NULL,
+        [LockoutEnabled] BIT NOT NULL DEFAULT 1,
+        [AccessFailedCount] INT NOT NULL DEFAULT 0,
+
+        [Name] VARCHAR(50) NULL,
+        [Role] VARCHAR(50) NULL,
+        [Location] VARCHAR(50) NULL,
+
+        CONSTRAINT [PK_AspNetUsers] PRIMARY KEY CLUSTERED ([Id] ASC)
     );
 END
+
+IF NOT EXISTS (
+    SELECT 1 FROM sys.indexes
+    WHERE name = 'UserNameIndex'
+)
+BEGIN
+    CREATE UNIQUE INDEX [UserNameIndex]
+    ON [dbo].[AspNetUsers] ([NormalizedUserName])
+    WHERE [NormalizedUserName] IS NOT NULL;
+END
+GO
+
+IF NOT EXISTS (
+    SELECT 1 FROM sys.indexes
+    WHERE name = 'EmailIndex'
+)
+BEGIN
+    CREATE UNIQUE INDEX [EmailIndex]
+    ON [dbo].[AspNetUsers] ([NormalizedEmail])
+    WHERE [NormalizedEmail] IS NOT NULL;
+END
+GO
+
 GO
 
 IF NOT EXISTS (
@@ -114,7 +193,7 @@ BEGIN
         [processor] VARCHAR(50) NULL,
         [ram_amount] DECIMAL(10,2) NULL,
         [description] VARCHAR(50) NULL,
-        [user_id] UNIQUEIDENTIFIER NULL,
+        [user_id] NVARCHAR(450) NULL,
         CONSTRAINT [PK_devices] PRIMARY KEY CLUSTERED ([id] ASC)
     );
 END
@@ -128,6 +207,6 @@ IF NOT EXISTS (
 BEGIN
     ALTER TABLE [dbo].[devices]
     ADD CONSTRAINT [FK_devices_users]
-    FOREIGN KEY ([user_id]) REFERENCES [dbo].[users]([id]);
+    FOREIGN KEY ([user_id]) REFERENCES [dbo].[AspNetUsers]([id]);
 END
 GO
