@@ -2,6 +2,7 @@
 using backend.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace backend.Controllers
 {
@@ -12,7 +13,7 @@ namespace backend.Controllers
     {
         private readonly IDeviceService deviceService;
 
-        public DeviceController(IDeviceService deviceService) 
+        public DeviceController(IDeviceService deviceService)
         {
             this.deviceService = deviceService;
         }
@@ -56,25 +57,37 @@ namespace backend.Controllers
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateDeviceDetails(Guid id, [FromBody] DeviceRequest request)
         {
-            var device = await deviceService.UpdateDetailsAsync(id, request);    
+            var device = await deviceService.UpdateDetailsAsync(id, request);
 
             return Ok(DeviceMapper.ToDTO(device));
         }
 
         [HttpPut("{id:guid}/assign")]
-        public async Task<IActionResult> AssignDevice(Guid id, [FromQuery] string userId)
+        public async Task<IActionResult> AssignDevice(Guid id)
         {
-            var device = await deviceService.AssignDeviceAsync(id, userId);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId != null)
+            {
+                var device = await deviceService.AssignDeviceAsync(id, userId);
 
-            return Ok(DeviceMapper.ToDTO(device));
+                return Ok(DeviceMapper.ToDTO(device));
+            }
+
+            return Unauthorized("Not authenticated");
         }
 
         [HttpPut("{id:guid}/unassign")]
-        public async Task<IActionResult> UnassignDevice(Guid id, [FromQuery] string userId)
+        public async Task<IActionResult> UnassignDevice(Guid id)
         {
-            var device = await deviceService.UnassignDeviceAsync(id, userId);  
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId != null)
+            {
+                var device = await deviceService.UnassignDeviceAsync(id, userId);
 
-            return Ok(DeviceMapper.ToDTO(device));
+                return Ok(DeviceMapper.ToDTO(device));
+            }
+
+            return Unauthorized("Not authenticated");
         }
     }
 }

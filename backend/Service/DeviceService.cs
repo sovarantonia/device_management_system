@@ -37,7 +37,6 @@ namespace backend.Service
             return device;
         }
 
-
         public async Task<Device> SaveAsync(DeviceRequest deviceRequest)
         {
             if (!Enum.TryParse<DeviceType>(deviceRequest.DeviceType, true, out var deviceType))

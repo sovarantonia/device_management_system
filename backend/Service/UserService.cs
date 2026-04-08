@@ -1,4 +1,5 @@
-﻿using backend.Entity;
+﻿using Azure.Core;
+using backend.Entity;
 using backend.Entity.DTO;
 using backend.Entity.Exceptions;
 using Microsoft.AspNetCore.Identity;
@@ -14,7 +15,7 @@ namespace backend.Service
             this.userManager = manager;
         }
 
-        public async Task<IdentityResult> DeleteAsync(Guid id)
+        public async Task<IdentityResult> DeleteAsync(string id)
         {
             var user = await GetByIdAsync(id);
 
@@ -56,9 +57,9 @@ namespace backend.Service
             return result;
         }
 
-        public async Task<User> GetByIdAsync(Guid id)
+        public async Task<User> GetByIdAsync(string id)
         {
-            var user = await userManager.FindByIdAsync(id.ToString());
+            var user = await userManager.FindByIdAsync(id);
             if (user == null)
             {
                 throw new EntityNotFoundException($"User with id {id} does not exist");
@@ -67,8 +68,10 @@ namespace backend.Service
             return user;
         }
 
-        public async Task<IdentityResult> UpdateAsync(User user)
+        public async Task<User> UpdateAsync(string id, UserRequest request)
         {
+            var user = await GetByIdAsync(id);
+
             var result = await userManager.UpdateAsync(user);
             if (!result.Succeeded)
             {
@@ -80,7 +83,7 @@ namespace backend.Service
                 throw new ArgumentException(string.Join("; ", result.Errors.Select(e => e.Description)));
             }
 
-            return result;
+            return user;
         }
     }
 }
