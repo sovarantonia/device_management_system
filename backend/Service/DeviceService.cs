@@ -142,7 +142,7 @@ namespace backend.Service
             return deviceToUpdate;
         }
 
-        public async Task<List<Device>> GetUserDevicesAsync(Guid userId)
+        public async Task<List<Device>> GetUserDevicesAsync(string userId)
         {
             var userExists = await dbContext.Users.AnyAsync(u => u.Id == userId);
 
@@ -154,7 +154,7 @@ namespace backend.Service
             return await dbContext.Devices.Include(d => d.User).Where(d => d.UserId == userId).ToListAsync();
         }
 
-        public async Task<Device> AssignDeviceAsync(Guid deviceId, Guid userId)
+        public async Task<Device> AssignDeviceAsync(Guid deviceId, string userId)
         {
             var device = await GetByIdAsync(deviceId);
 
@@ -176,7 +176,7 @@ namespace backend.Service
             return device;
         }
 
-        public async Task<Device> UnassignDeviceAsync(Guid deviceId, Guid userId)
+        public async Task<Device> UnassignDeviceAsync(Guid deviceId, string userId)
         {
             var device = await GetByIdAsync(deviceId);
 
