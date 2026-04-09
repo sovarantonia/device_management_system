@@ -48,7 +48,7 @@ export class DevicePage implements OnInit {
 
     this.deviceService.delete(deviceId).subscribe({
       next: () => {
-        this.snackbarService.open('Device was deleted', 'success')
+        this.snackbarService.open('Device deleted', 'success')
         this.loadDevices()
       },
       error: (err) => this.snackbarService.open('Could not delete device', 'error')
