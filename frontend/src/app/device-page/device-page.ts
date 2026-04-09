@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { DeviceRender } from "../device-render/device-render";
 import { DeviceService } from '../service/device/device-service';
 import { DeviceResponse } from '../model/device-response';
+import { SnackbarService } from '../service/snackbar/snackbar-service';
 
 @Component({
   selector: 'app-device-page',
@@ -12,7 +13,7 @@ import { DeviceResponse } from '../model/device-response';
 })
 export class DevicePage implements OnInit {
   devices: DeviceResponse[] = [];
-  constructor(private deviceService: DeviceService, private router: Router) { }
+  constructor(private deviceService: DeviceService, private router: Router, private snackbarService: SnackbarService) { }
 
   ngOnInit(): void {
     this.loadDevices();
@@ -24,7 +25,7 @@ export class DevicePage implements OnInit {
         this.devices = data;
       },
       error: (err) => {
-        console.error('Error loading devices', err);
+        this.snackbarService.open('Error loading devices', 'error');
       }
     })
   }
@@ -45,8 +46,11 @@ export class DevicePage implements OnInit {
     }
 
     this.deviceService.delete(deviceId).subscribe({
-      next: () => this.loadDevices(),
-      error: (err) => console.error('Error deleting device', err)
+      next: () => {
+        this.snackbarService.open('Device was deleted', 'success')
+        this.loadDevices()
+      },
+      error: (err) => this.snackbarService.open('Could not delete device', 'error')
     });
 
     this.loadDevices();

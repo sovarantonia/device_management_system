@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DeviceForm } from "../device-form/device-form";
 import { DeviceRequest } from '../model/device-request';
+import { SnackbarService } from '../service/snackbar/snackbar-service';
 
 @Component({
   selector: 'app-view-device',
@@ -18,7 +19,7 @@ export class ViewDevice implements OnInit {
   id: string | null = null;
   formTitle = "Edit device";
 
-  constructor(private deviceService: DeviceService, private route: ActivatedRoute, private router: Router) {
+  constructor(private deviceService: DeviceService, private route: ActivatedRoute, private snackbarService: SnackbarService) {
     this.id = this.route.snapshot.paramMap.get('id');
   }
 
@@ -40,12 +41,10 @@ export class ViewDevice implements OnInit {
     if (this.id) {
       this.deviceService.updateDetails(this.id, deviceRequest).subscribe({
         next: () => {
-        alert('Device updated');
-        this.router.navigate(['/devices']);
+        this.snackbarService.open('Device updated', 'success');
       },
         error: (err) => {
-        alert(err.error?.message || 'Could not update device.')
-        this.errorMessage = err.error?.message || 'Could not update device.';
+        this.snackbarService.open(err.error?.message || 'Could not update device.', 'error')
       }
       })
     }

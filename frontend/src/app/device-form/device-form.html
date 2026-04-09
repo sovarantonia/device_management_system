@@ -1,7 +1,4 @@
 <div id="device-form">
-    <!-- @if (errorMessage) {
-    <p>{{errorMessage}}</p>
-    } -->
     <h2>{{formTitle}}</h2>
     <button (click)="close()">Close</button>
 
@@ -71,7 +68,7 @@
         <div class="form-group">
             <label for="device-description">Description:</label>
             <textarea id="device-description" formControlName="deviceDescription" rows="4"></textarea>
-            @if (deviceForm.get('deviceDescription')?.touched && deviceForm.get('deviceDescription')?.invalid) {
+            @if ((deviceForm.get('deviceDescription')?.touched) && deviceForm.get('deviceDescription')?.invalid) {
             <p>Description is required</p>
             }
         </div>
