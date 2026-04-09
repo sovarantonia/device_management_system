@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { UserRequest } from '../model/user-request';
 import { AuthService } from '../service/auth/auth-service';
 import { confirmPasswordValidator } from '../validator/password-validator';
@@ -9,7 +9,7 @@ import { SnackbarService } from '../service/snackbar/snackbar-service';
 
 @Component({
   selector: 'app-user-register',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './user-register.html',
   styleUrl: './user-register.css',
 })

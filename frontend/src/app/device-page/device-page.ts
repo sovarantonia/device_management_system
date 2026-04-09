@@ -4,6 +4,7 @@ import { DeviceRender } from "../device-render/device-render";
 import { DeviceService } from '../service/device/device-service';
 import { DeviceResponse } from '../model/device-response';
 import { SnackbarService } from '../service/snackbar/snackbar-service';
+import { AuthService } from '../service/auth/auth-service';
 
 @Component({
   selector: 'app-device-page',
@@ -13,7 +14,7 @@ import { SnackbarService } from '../service/snackbar/snackbar-service';
 })
 export class DevicePage implements OnInit {
   devices: DeviceResponse[] = [];
-  constructor(private deviceService: DeviceService, private router: Router, private snackbarService: SnackbarService) { }
+  constructor(private deviceService: DeviceService, private router: Router, private snackbarService: SnackbarService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.loadDevices();
@@ -54,5 +55,10 @@ export class DevicePage implements OnInit {
     });
 
     this.loadDevices();
+  }
+
+  onLogoutBtnClicked() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }
