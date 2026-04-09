@@ -39,8 +39,11 @@ namespace backend.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserRequest userRequest)
         {
-            var user = await userService.RegisterAsync(userRequest);
-            return Ok(user);
+            await userService.RegisterAsync(userRequest);
+            return Ok(new
+            {
+                message = "User registered successfully"
+            });
         }
     }
 }

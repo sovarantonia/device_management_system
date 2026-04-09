@@ -44,5 +44,13 @@ namespace backend.Controllers
 
             return Ok(UserMapper.ToDTO(user));
         }
+
+        [HttpGet("search/{email}")]
+        public async Task<IActionResult> FindUserByEmail(string email)
+        {
+            var user = await userService.FindByEmailAsync(email);
+
+            return Ok(UserMapper.ToDTO(user));
+        }
     }
 }

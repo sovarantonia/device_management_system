@@ -11,5 +11,6 @@ namespace backend.Service
         public Task<IdentityResult> RegisterAsync(UserRequest request);
         public Task<User> GetByIdAsync(string id);
         public Task<User> UpdateAsync(string id, UserRequest user);
+        public Task<User> FindByEmailAsync(string email);
     }
 }

@@ -85,5 +85,16 @@ namespace backend.Service
 
             return user;
         }
+
+        public async Task<User> FindByEmailAsync(string email)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                throw new EntityNotFoundException($"Email {email} not found");
+            }
+
+            return user;
+        }
     }
 }
