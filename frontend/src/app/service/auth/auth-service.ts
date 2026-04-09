@@ -6,6 +6,7 @@ import { RegisterResponse } from "../../model/register-response";
 import { UserLoginRequest } from "../../model/user-login-request";
 import { UserLoginResponse } from "../../model/user-login-response";
 import { isPlatformBrowser } from "@angular/common";
+import { UserResponse } from "../../model/user-response";
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
@@ -19,7 +20,7 @@ export class AuthService {
 
     login(userLoginRequest: UserLoginRequest): Observable<UserLoginResponse> {
         return this.http.post<UserLoginResponse>(`${this.baseUrl}/login`, userLoginRequest).pipe(
-            tap(res => this.setToken(res.token))
+            tap(res => { this.setToken(res.token); this.setCurrentUser(res.user) })
         );
     }
 
@@ -29,9 +30,16 @@ export class AuthService {
         }
     }
 
+    setCurrentUser(user: UserResponse) {
+        if (isPlatformBrowser(this.platformId)) {
+            sessionStorage.setItem('user', JSON.stringify(user));
+        }
+    }
+
     logout(): void {
         if (isPlatformBrowser(this.platformId)) {
             sessionStorage.removeItem('token');
+            sessionStorage.removeItem('user');
         }
     }
 
@@ -43,13 +51,22 @@ export class AuthService {
         return null;
     }
 
-    getCurrentUser(): string | null {
+    getCurrentUser() {
+        if (isPlatformBrowser(this.platformId)) {
+            const user = sessionStorage.getItem('user');
+            return user ? JSON.parse(user) : null;
+        }
+
+        return null;
+    }
+
+    getCurrentUserId(): string | null {
         const token = this.getToken();
         if (!token) {
             return null;
         }
         const payload = JSON.parse(atob(token.split('.')[1]));
-        
+
         return payload.sub ?? null;
     }
 

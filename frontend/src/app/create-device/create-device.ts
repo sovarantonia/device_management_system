@@ -23,7 +23,7 @@ export class CreateDevice {
         this.router.navigate(['/devices']);
       },
       error: (err) => {
-        this.snackbarService.open(err.message || 'Could not save device', 'error');
+        this.snackbarService.open(err.error?.message || 'Could not save device', 'error');
       }
    })
   }

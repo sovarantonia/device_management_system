@@ -25,7 +25,7 @@ export class ViewDevice implements OnInit {
   }
 
   ngOnInit(): void {
-    this.currentUserId = this.authService.getCurrentUser();
+    this.currentUserId = this.authService.getCurrentUserId();
     this.getDevice();
   }
 
@@ -62,7 +62,7 @@ export class ViewDevice implements OnInit {
           this.snackbarService.open('Device updated', 'success');
         },
         error: (err) => {
-          this.snackbarService.open(err.error?.message || 'Could not update device.', 'error')
+          this.snackbarService.open(err.errors?.message || 'Could not update device.', 'error')
         }
       })
     }
@@ -76,7 +76,7 @@ export class ViewDevice implements OnInit {
           this.getDevice();
         },
         error: (err) => {
-          this.snackbarService.open(err.message || 'Could not assign device', 'error');
+          this.snackbarService.open(err.error?.message || 'Could not assign device', 'error');
         }
       })
     }
@@ -90,7 +90,7 @@ export class ViewDevice implements OnInit {
           this.getDevice();
         },
         error: (err) => {
-          this.snackbarService.open(err.message || 'Could not unassign device', 'error');
+          this.snackbarService.open(err.error?.message || 'Could not unassign device', 'error');
         }
       })
     }

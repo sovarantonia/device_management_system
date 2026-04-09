@@ -1,6 +1,13 @@
 <div id="device-page">
-    <button (click)="onAddDeviceClick()">Add device</button>
-    <button (click)="onLogoutBtnClicked()">Logout</button>
+    <div class="device-header">
+        <button (click)="onAddDeviceClick()">Add device</button>
+
+        <div class="user-section">
+            <span>{{ currentUser.name }} ({{ currentUser.email }})</span>
+            <button (click)="onLogoutBtnClicked()">Logout</button>
+        </div>
+    </div>
+
 
     <app-device-render [devices]="devices" (viewDeviceClicked)="viewDevice($event)"
         (deleteDeviceClicked)="onDeleteDeviceClick($event)" />

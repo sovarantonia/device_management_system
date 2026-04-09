@@ -5,6 +5,7 @@ import { DeviceService } from '../service/device/device-service';
 import { DeviceResponse } from '../model/device-response';
 import { SnackbarService } from '../service/snackbar/snackbar-service';
 import { AuthService } from '../service/auth/auth-service';
+import { UserResponse } from '../model/user-response';
 
 @Component({
   selector: 'app-device-page',
@@ -14,9 +15,11 @@ import { AuthService } from '../service/auth/auth-service';
 })
 export class DevicePage implements OnInit {
   devices: DeviceResponse[] = [];
+  currentUser!: UserResponse;
   constructor(private deviceService: DeviceService, private router: Router, private snackbarService: SnackbarService, private authService: AuthService) { }
 
   ngOnInit(): void {
+    this.currentUser = this.authService.getCurrentUser();
     this.loadDevices();
   }
 

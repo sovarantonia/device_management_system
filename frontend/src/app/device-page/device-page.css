@@ -2,3 +2,16 @@
     display: grid;
     gap: 15px;
 }
+
+.device-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

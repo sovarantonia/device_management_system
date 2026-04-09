@@ -19,6 +19,7 @@
             }
         </div>
 
+        @if (canAssign || canUnassign) {
         <div class="device-actions">
             <h3>Options</h3>
             @if (canAssign) {
@@ -29,5 +30,7 @@
             <button (click)="unassignDevice()">Unassign device</button>
             }
         </div>
+        }
+
     </div>
 </div>
