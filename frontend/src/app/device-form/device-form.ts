@@ -102,13 +102,4 @@ export class DeviceForm implements OnInit, OnChanges {
     })
   }
 
-  canGenerateDescription() {
-    return this.deviceForm.get('name')?.valid &&
-      this.deviceForm.get('manufacturer')?.valid &&
-      this.deviceForm.get('deviceType')?.valid &&
-      this.deviceForm.get('os')?.valid &&
-      this.deviceForm.get('ramAmount')?.valid;
-  }
-
-
 }
