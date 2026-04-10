@@ -17,6 +17,14 @@ namespace backend.Service
 
         public async Task<string> GenerateDescription(DeviceRequest device)
         {
+
+            if (string.IsNullOrEmpty(_apiKey))
+            {
+                return $"{device.Name} is a {device.DeviceType} manufactured by {device.Manufacturer}, " +
+                       $"running {device.OS} {device.OSVersion} with {device.RamAmount}GB RAM " +
+                       $"and powered by {device.Processor}.";
+            }
+
             var prompt = $@"
                 Generate a short, professional description for this device:
 
