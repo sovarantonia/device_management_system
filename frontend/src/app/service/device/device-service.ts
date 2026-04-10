@@ -39,4 +39,10 @@ export class DeviceService {
     unassignDevice(deviceId: string): Observable<DeviceResponse> {
         return this.http.put<DeviceResponse>(`${this.baseUrl}/${deviceId}/unassign`, null);
     }
+
+    generateDescription(deviceRequest: DeviceRequest): Observable<string> {
+        return this.http.post(`${this.baseUrl}/generate-description`, deviceRequest, {
+            responseType: 'text'
+        });
+    }
 }

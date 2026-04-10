@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { DeviceRequest } from '../model/device-request';
 import { DeviceResponse } from '../model/device-response';
 import { Router } from '@angular/router';
+import { DeviceService } from '../service/device/device-service';
+import { SnackbarService } from '../service/snackbar/snackbar-service';
 
 @Component({
   selector: 'app-device-form',
@@ -17,7 +19,9 @@ export class DeviceForm implements OnInit, OnChanges {
 
   deviceForm!: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private router: Router) { }
+  isGenerating = false;
+
+  constructor(private formBuilder: FormBuilder, private router: Router, private deviceService: DeviceService, private snackbarService: SnackbarService) { }
 
   ngOnInit(): void {
     this.deviceForm = this.formBuilder.group({
@@ -28,7 +32,7 @@ export class DeviceForm implements OnInit, OnChanges {
       deviceOSVersion: ['', Validators.required],
       deviceProcessor: ['', Validators.required],
       deviceRamAmount: [0, [Validators.required, Validators.min(0)]],
-      deviceDescription: ['', Validators.required],
+      deviceDescription: ['', [Validators.required, Validators.maxLength(255)]],
     })
   }
 
@@ -70,6 +74,40 @@ export class DeviceForm implements OnInit, OnChanges {
 
   close() {
     this.router.navigate(['/devices']);
+  }
+
+  onGenerateDescClick() {
+    this.isGenerating = true;
+    const formValue = this.deviceForm.value;
+    const device: DeviceRequest = {
+      name: formValue.deviceName,
+      manufacturer: formValue.deviceManufacturer,
+      deviceType: formValue.deviceType,
+      os: formValue.deviceOS,
+      osVersion: formValue.deviceOSVersion,
+      processor: formValue.deviceProcessor,
+      ramAmount: formValue.deviceRamAmount,
+    };
+    this.deviceService.generateDescription(device).subscribe({
+      next: (data) => {
+        this.deviceForm.patchValue({
+          deviceDescription: data
+        })
+        this.isGenerating = false;
+      },
+      error: () => {
+        this.snackbarService.open('Could not generate a description', 'error');
+        this.isGenerating = false;
+      }
+    })
+  }
+
+  canGenerateDescription() {
+    return this.deviceForm.get('name')?.valid &&
+      this.deviceForm.get('manufacturer')?.valid &&
+      this.deviceForm.get('deviceType')?.valid &&
+      this.deviceForm.get('os')?.valid &&
+      this.deviceForm.get('ramAmount')?.valid;
   }
 
 

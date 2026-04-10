@@ -6,6 +6,6 @@ export interface DeviceRequest {
     osVersion: string;
     processor: string;
     ramAmount: number;
-    description: string;
+    description?: string;
     userId?: string | null;
 }

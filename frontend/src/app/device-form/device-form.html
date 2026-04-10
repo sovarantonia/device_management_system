@@ -71,11 +71,16 @@
             @if ((deviceForm.get('deviceDescription')?.touched) && deviceForm.get('deviceDescription')?.invalid) {
             <p>Description is required</p>
             }
+            <button type="button" (click)="onGenerateDescClick()" [disabled]="isGenerating">{{ isGenerating ? 'Generating...' : 'Generate Description' }}</button>
+            
         </div>
 
         <div class="form-actions">
             <button type="submit" [disabled]="deviceForm.invalid">Submit</button>
         </div>
-
+        
+        
     </form>
+
+    
 </div>
