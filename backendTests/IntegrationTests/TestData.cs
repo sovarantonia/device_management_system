@@ -1,10 +1,6 @@
 ﻿using backend.Entity;
 using backend.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace backendTests.IntegrationTests
 {
@@ -12,31 +8,42 @@ namespace backendTests.IntegrationTests
     {
         public static void InsertData(AppDbContext context)
         {
-            Guid userId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+            string userId = "11111111-1111-1111-1111-111111111111";
+            string userId2 = "55555555-5555-5555-5555-555555555555";
+
             Guid deviceId1 = Guid.Parse("22222222-2222-2222-2222-222222222222");
             Guid deviceId2 = Guid.Parse("33333333-3333-3333-3333-333333333333");
             Guid deviceId3 = Guid.Parse("44444444-4444-4444-4444-444444444444");
 
-            Guid userId2 = Guid.Parse("55555555-5555-5555-5555-555555555555");
+            var passwordHasher = new PasswordHasher<User>();
 
-            context.Users.AddRange(
-            [
-                new User
-                    {
-                        Id = userId,
-                        Name = "Integration User",
-                        Email = "integration@test.com",
-                        Password = BCrypt.Net.BCrypt.HashPassword("test123")
-                    },
-                    new User
-                    {
-                        Id = userId2,
-                        Name = "Integration User 2",
-                        Email = "integration2@test.com",
-                        Password = BCrypt.Net.BCrypt.HashPassword("test123")
-                    },
+            var user1 = new User
+            {
+                Id = userId,
+                Name = "Integration User",
+                Email = "integration@test.com",
+                NormalizedEmail = "INTEGRATION@TEST.COM",
+                UserName = "integration@test.com",
+                NormalizedUserName = "INTEGRATION@TEST.COM",
+                Role = "User",
+                Location = "Test Location"
+            };
+            user1.PasswordHash = passwordHasher.HashPassword(user1, "test123");
 
-                ]);
+            var user2 = new User
+            {
+                Id = userId2,
+                Name = "Integration User 2",
+                Email = "integration2@test.com",
+                NormalizedEmail = "INTEGRATION2@TEST.COM",
+                UserName = "integration2@test.com",
+                NormalizedUserName = "INTEGRATION2@TEST.COM",
+                Role = "User",
+                Location = "Test Location 2"
+            };
+            user2.PasswordHash = passwordHasher.HashPassword(user2, "test123");
+
+            context.Users.AddRange(user1, user2);
 
             context.Devices.AddRange(
             [
