@@ -62,6 +62,7 @@ builder.Services
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddHttpClient<AiService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IDeviceService, DeviceService>();
 

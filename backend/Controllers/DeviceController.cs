@@ -12,10 +12,12 @@ namespace backend.Controllers
     public class DeviceController : ControllerBase
     {
         private readonly IDeviceService deviceService;
+        private readonly AiService aiService;
 
-        public DeviceController(IDeviceService deviceService)
+        public DeviceController(IDeviceService deviceService, AiService aiService)
         {
             this.deviceService = deviceService;
+            this.aiService = aiService;
         }
 
         [HttpGet("{id:guid}")]
@@ -88,6 +90,13 @@ namespace backend.Controllers
             }
 
             return Unauthorized("Not authenticated");
+        }
+
+        [HttpPost("generate-description")]
+        public async Task<IActionResult> GenerateDescription([FromBody] DeviceRequest request)
+        {
+            var response = await aiService.GenerateDescription(request);
+            return Ok(response);
         }
     }
 }
