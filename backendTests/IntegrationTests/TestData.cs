@@ -14,10 +14,11 @@ namespace backendTests.IntegrationTests
             Guid deviceId1 = Guid.Parse("22222222-2222-2222-2222-222222222222");
             Guid deviceId2 = Guid.Parse("33333333-3333-3333-3333-333333333333");
             Guid deviceId3 = Guid.Parse("44444444-4444-4444-4444-444444444444");
+            Guid deviceId4 = Guid.Parse("66666666-6666-6666-6666-666666666666");
 
-            var passwordHasher = new PasswordHasher<User>();
+            var passwordHasher = new PasswordHasher<AppUser>();
 
-            var user1 = new User
+            var user1 = new AppUser
             {
                 Id = userId,
                 Name = "Integration User",
@@ -30,7 +31,7 @@ namespace backendTests.IntegrationTests
             };
             user1.PasswordHash = passwordHasher.HashPassword(user1, "test123");
 
-            var user2 = new User
+            var user2 = new AppUser
             {
                 Id = userId2,
                 Name = "Integration User 2",
@@ -68,6 +69,14 @@ namespace backendTests.IntegrationTests
                         Id = deviceId3,
                         Name = "Tablet left alone",
                         UserId = null,
+                        DeviceType = DeviceType.Tablet,
+                    },
+
+                    new Device
+                    {
+                        Id = deviceId4,
+                        Name = "Tablet owned",
+                        UserId = userId2,
                         DeviceType = DeviceType.Tablet,
                     },
                 ]);

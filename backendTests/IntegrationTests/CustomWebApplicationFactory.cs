@@ -43,7 +43,7 @@ namespace backendTests.IntegrationTests
 
                 using var scope = sp.CreateScope();
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
 
                 db.Database.EnsureDeleted();
                 db.Database.EnsureCreated();
