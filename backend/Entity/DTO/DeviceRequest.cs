@@ -1,4 +1,6 @@
-﻿namespace backend.Entity.DTO
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace backend.Entity.DTO
 {
     public class DeviceRequest
     {
@@ -9,6 +11,8 @@
         public string? OSVersion { get; set; }
         public string? Processor { get; set; }
         public decimal? RamAmount { get; set; }
+        
+        [MaxLength(255)]
         public string? Description { get; set; }
         public string? UserId { get; set; }
     }

@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using backend.Entity;
+﻿using backend.Entity;
 using backend.Entity.DTO;
 using backend.Entity.Exceptions;
 using Microsoft.AspNetCore.Identity;
@@ -48,7 +47,7 @@ namespace backend.Service
             {
                 if (result.Errors.Any(e => e.Code == "DuplicateEmail"))
                 {
-                    throw new ResourceConflictException($"Email {user.Email} already exists.");
+                    throw new ResourceConflictException($"Email {user.Email} already exists");
                 }
 
                 throw new ArgumentException(string.Join("; ", result.Errors.Select(e => e.Description)));
@@ -72,14 +71,45 @@ namespace backend.Service
         {
             var user = await GetByIdAsync(id);
 
+            if (!string.IsNullOrWhiteSpace(request.Name))
+            {
+                user.Name = request.Name;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.Role))
+            {
+                user.Role = request.Role;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.Location))
+            {
+                user.Location = request.Location;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.Email) && request.Email != user.Email)
+            {
+                var emailResult = await userManager.SetEmailAsync(user, request.Email);
+                if (!emailResult.Succeeded)
+                {
+                    if (emailResult.Errors.Any(e => e.Code == "DuplicateEmail"))
+                    {
+                        throw new ResourceConflictException($"User with email {request.Email} already exists");
+                    }
+
+                    throw new ArgumentException(string.Join("; ", emailResult.Errors.Select(e => e.Description)));
+                }
+
+                var usernameResult = await userManager.SetUserNameAsync(user, request.Email);
+                if (!usernameResult.Succeeded)
+                {
+                    throw new ArgumentException(string.Join("; ", usernameResult.Errors.Select(e => e.Description)));
+                }
+            }
+
+
             var result = await userManager.UpdateAsync(user);
             if (!result.Succeeded)
             {
-                if (result.Errors.Any(e => e.Code == "DuplicateEmail"))
-                {
-                    throw new ResourceConflictException($"Email {user.Email} already exists.");
-                }
-
                 throw new ArgumentException(string.Join("; ", result.Errors.Select(e => e.Description)));
             }
 

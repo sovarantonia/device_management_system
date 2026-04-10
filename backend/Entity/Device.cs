@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backend.Entity
 {
@@ -18,6 +19,8 @@ namespace backend.Entity
 
         [Column("ram_amount")]
         public decimal? RamAmount { get; set; }
+
+        [MaxLength(255)]
         public string? Description { get; set; }
 
         [Column("user_id")]
