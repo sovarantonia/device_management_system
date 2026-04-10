@@ -85,7 +85,7 @@ BEGIN
         [OS_version] VARCHAR(50) NULL,
         [processor] VARCHAR(50) NULL,
         [ram_amount] DECIMAL(10,2) NULL,
-        [description] VARCHAR(50) NULL,
+        [description] VARCHAR(MAX) NULL,
         [user_id] NVARCHAR(450) NULL,
         CONSTRAINT [PK_devices] PRIMARY KEY CLUSTERED ([id] ASC)
     );
@@ -192,7 +192,7 @@ BEGIN
         [OS_version] VARCHAR(50) NULL,
         [processor] VARCHAR(50) NULL,
         [ram_amount] DECIMAL(10,2) NULL,
-        [description] VARCHAR(50) NULL,
+        [description] VARCHAR(MAX) NULL,
         [user_id] NVARCHAR(450) NULL,
         CONSTRAINT [PK_devices] PRIMARY KEY CLUSTERED ([id] ASC)
     );
