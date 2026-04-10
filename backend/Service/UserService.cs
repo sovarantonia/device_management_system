@@ -7,9 +7,9 @@ namespace backend.Service
 {
     public class UserService : IUserService
     {
-        private readonly UserManager<User> userManager;
+        private readonly UserManager<AppUser> userManager;
 
-        public UserService(UserManager<User> manager)
+        public UserService(UserManager<AppUser> manager)
         {
             this.userManager = manager;
         }
@@ -26,14 +26,14 @@ namespace backend.Service
             return await userManager.DeleteAsync(user);
         }
 
-        public List<User> GetAll()
+        public List<AppUser> GetAll()
         {
             return userManager.Users.ToList();
         }
 
         public async Task<IdentityResult> RegisterAsync(UserRequest request)
         {
-            var user = new User
+            var user = new AppUser
             {
                 Name = request.Name,
                 Email = request.Email,
@@ -56,7 +56,7 @@ namespace backend.Service
             return result;
         }
 
-        public async Task<User> GetByIdAsync(string id)
+        public async Task<AppUser> GetByIdAsync(string id)
         {
             var user = await userManager.FindByIdAsync(id);
             if (user == null)
@@ -67,7 +67,7 @@ namespace backend.Service
             return user;
         }
 
-        public async Task<User> UpdateAsync(string id, UserRequest request)
+        public async Task<AppUser> UpdateAsync(string id, UserRequest request)
         {
             var user = await GetByIdAsync(id);
 
@@ -116,7 +116,7 @@ namespace backend.Service
             return user;
         }
 
-        public async Task<User> FindByEmailAsync(string email)
+        public async Task<AppUser> FindByEmailAsync(string email)
         {
             var user = await userManager.FindByEmailAsync(email);
             if (user == null)

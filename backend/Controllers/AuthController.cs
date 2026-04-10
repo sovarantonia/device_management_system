@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using backend.Entity;
+﻿using backend.Entity;
 using backend.Entity.DTO;
 using backend.Helper;
 using backend.Service;
@@ -11,11 +10,11 @@ namespace backend.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<User> userManager;
+        private readonly UserManager<AppUser> userManager;
         private readonly IConfiguration configuration;
         private readonly IUserService userService;
 
-        public AuthController(UserManager<User> userManager, IConfiguration configuration, IUserService userService)
+        public AuthController(UserManager<AppUser> userManager, IConfiguration configuration, IUserService userService)
         {
             this.userManager = userManager;
             this.configuration = configuration;

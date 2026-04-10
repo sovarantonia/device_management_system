@@ -8,7 +8,7 @@ namespace backend.Helper
 {
     public static class JwtHelper
     {
-        public static string GenerateJwtToken(IConfiguration configuration, User user)
+        public static string GenerateJwtToken(IConfiguration configuration, AppUser user)
         {
             var signingKey = new SymmetricSecurityKey(
                         Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]!));

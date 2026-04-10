@@ -7,10 +7,10 @@ namespace backend.Service
     public interface IUserService
     {
         public Task<IdentityResult> DeleteAsync(string id);
-        public List<User> GetAll();
+        public List<AppUser> GetAll();
         public Task<IdentityResult> RegisterAsync(UserRequest request);
-        public Task<User> GetByIdAsync(string id);
-        public Task<User> UpdateAsync(string id, UserRequest user);
-        public Task<User> FindByEmailAsync(string email);
+        public Task<AppUser> GetByIdAsync(string id);
+        public Task<AppUser> UpdateAsync(string id, UserRequest user);
+        public Task<AppUser> FindByEmailAsync(string email);
     }
 }

@@ -7,7 +7,7 @@ namespace backend.Helper
     {
         public static async Task SetPasswordsAsync(IServiceProvider serviceProvider)
         {
-            var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<AppUser>>();
 
             var users = new[]
         {
