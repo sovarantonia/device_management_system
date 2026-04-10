@@ -1,13 +1,9 @@
 ﻿using backend.Entity.DTO;
 using backend.Repository;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace backendTests.IntegrationTests
 {
@@ -47,7 +43,7 @@ namespace backendTests.IntegrationTests
         [TestMethod]
         public async Task GetUserById()
         {
-            Guid userId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+            var userId = "11111111-1111-1111-1111-111111111111";
 
             var response = await _client.GetAsync($"/user/{userId}");
 
@@ -64,13 +60,13 @@ namespace backendTests.IntegrationTests
         [TestMethod]
         public async Task GetUserById_UserNotFound()
         {
-            var missingId = Guid.Parse("99999999-9999-9999-9999-999999999999");
+            var missingId = "99999999-9999-9999-9999-999999999999";
 
             var response = await _client.GetAsync($"/user/{missingId}");
 
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
 
-            var error = await response.Content.ReadFromJsonAsync<ErrorResponse>();
+            var error = await response.Content.ReadFromJsonAsync<MessageResponse>();
 
             Assert.IsNotNull(error);
             Assert.AreEqual($"User with id {missingId} does not exist", error.Message);
@@ -92,7 +88,7 @@ namespace backendTests.IntegrationTests
         }
 
         [TestMethod]
-        public async Task SaveUser()
+        public async Task RegisterUser()
         {
             var request = new UserRequest
             {
@@ -103,29 +99,18 @@ namespace backendTests.IntegrationTests
                 Password = "secret123"
             };
 
-            var response = await _client.PostAsJsonAsync("/user", request);
+            var response = await _client.PostAsJsonAsync("/register", request);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            var user = await response.Content.ReadFromJsonAsync<UserResponse>();
+            var result = await response.Content.ReadFromJsonAsync<MessageResponse>();
 
-            Assert.IsNotNull(user);
-            Assert.AreEqual("Charlie", user.Name);
-            Assert.AreEqual("charlie@test.com", user.Email);
-            Assert.AreNotEqual(Guid.Empty, user.Id);
-
-            using var scope = _factory.Services.CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-            var savedUser = await db.Users.FindAsync(user.Id);
-
-            Assert.IsNotNull(savedUser);
-            Assert.AreEqual("Charlie", savedUser.Name);
-            Assert.AreEqual("charlie@test.com", savedUser.Email);
+            Assert.IsNotNull(result);
+            Assert.AreEqual("User registered successfully", result.Message);
         }
 
         [TestMethod]
-        public async Task SaveUser_EmailAlreadyExists()
+        public async Task RegisterUser_EmailAlreadyExists()
         {
             var request = new UserRequest
             {
@@ -136,20 +121,20 @@ namespace backendTests.IntegrationTests
                 Password = "secret123"
             };
 
-            var response = await _client.PostAsJsonAsync("/user", request);
+            var response = await _client.PostAsJsonAsync("/register", request);
 
             Assert.AreEqual(HttpStatusCode.Conflict, response.StatusCode);
 
-            var error = await response.Content.ReadFromJsonAsync<ErrorResponse>();
+            var error = await response.Content.ReadFromJsonAsync<MessageResponse>();
 
             Assert.IsNotNull(error);
-            Assert.AreEqual("User with email integration@test.com already exists", error.Message);
+            Assert.AreEqual("Email integration@test.com already exists", error.Message);
         }
 
         [TestMethod]
         public async Task DeleteUser()
         {
-            Guid userId = Guid.Parse("55555555-5555-5555-5555-555555555555");
+            var userId = "55555555-5555-5555-5555-555555555555";
             var response = await _client.DeleteAsync($"/user/{userId}");
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
@@ -165,13 +150,13 @@ namespace backendTests.IntegrationTests
         [TestMethod]
         public async Task DeleteUser_NotFound()
         {
-            var missingId = Guid.Parse("99999999-9999-9999-9999-999999999999");
+            var missingId = "99999999-9999-9999-9999-999999999999";
 
             var response = await _client.DeleteAsync($"/user/{missingId}");
 
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
 
-            var error = await response.Content.ReadFromJsonAsync<ErrorResponse>();
+            var error = await response.Content.ReadFromJsonAsync<MessageResponse>();
 
             Assert.IsNotNull(error);
             Assert.AreEqual($"User with id {missingId} does not exist", error.Message);
@@ -185,7 +170,7 @@ namespace backendTests.IntegrationTests
                 Name = "Alice",
                 Location = "Far far away"
             };
-            Guid userId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+            var userId = "11111111-1111-1111-1111-111111111111";
 
             var response = await _client.PutAsJsonAsync($"/user/{userId}", request);
 
@@ -213,7 +198,7 @@ namespace backendTests.IntegrationTests
         [TestMethod]
         public async Task UpdateUser_NotFound()
         {
-            var missingId = Guid.Parse("99999999-9999-9999-9999-999999999999");
+            var missingId = "99999999-9999-9999-9999-999999999999";
 
             var request = new UserRequest
             {
@@ -224,7 +209,7 @@ namespace backendTests.IntegrationTests
 
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
 
-            var error = await response.Content.ReadFromJsonAsync<ErrorResponse>();
+            var error = await response.Content.ReadFromJsonAsync<MessageResponse>();
 
             Assert.IsNotNull(error);
             Assert.AreEqual($"User with id {missingId} does not exist", error.Message);
@@ -238,13 +223,13 @@ namespace backendTests.IntegrationTests
                 Email = "integration2@test.com"
             };
 
-            Guid userId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+            var userId = "11111111-1111-1111-1111-111111111111";
 
             var response = await _client.PutAsJsonAsync($"/user/{userId}", request);
 
             Assert.AreEqual(HttpStatusCode.Conflict, response.StatusCode);
 
-            var error = await response.Content.ReadFromJsonAsync<ErrorResponse>();
+            var error = await response.Content.ReadFromJsonAsync<MessageResponse>();
 
             Assert.IsNotNull(error);
             Assert.AreEqual("User with email integration2@test.com already exists", error.Message);

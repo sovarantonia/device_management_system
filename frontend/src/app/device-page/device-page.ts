@@ -3,6 +3,9 @@ import { Router } from '@angular/router';
 import { DeviceRender } from "../device-render/device-render";
 import { DeviceService } from '../service/device/device-service';
 import { DeviceResponse } from '../model/device-response';
+import { SnackbarService } from '../service/snackbar/snackbar-service';
+import { AuthService } from '../service/auth/auth-service';
+import { UserResponse } from '../model/user-response';
 
 @Component({
   selector: 'app-device-page',
@@ -12,9 +15,11 @@ import { DeviceResponse } from '../model/device-response';
 })
 export class DevicePage implements OnInit {
   devices: DeviceResponse[] = [];
-  constructor(private deviceService: DeviceService, private router: Router) { }
+  currentUser!: UserResponse;
+  constructor(private deviceService: DeviceService, private router: Router, private snackbarService: SnackbarService, private authService: AuthService) { }
 
   ngOnInit(): void {
+    this.currentUser = this.authService.getCurrentUser();
     this.loadDevices();
   }
 
@@ -24,7 +29,7 @@ export class DevicePage implements OnInit {
         this.devices = data;
       },
       error: (err) => {
-        console.error('Error loading devices', err);
+        this.snackbarService.open('Error loading devices', 'error');
       }
     })
   }
@@ -45,10 +50,18 @@ export class DevicePage implements OnInit {
     }
 
     this.deviceService.delete(deviceId).subscribe({
-      next: () => this.loadDevices(),
-      error: (err) => console.error('Error deleting device', err)
+      next: () => {
+        this.snackbarService.open('Device deleted', 'success')
+        this.loadDevices()
+      },
+      error: (err) => this.snackbarService.open('Could not delete device', 'error')
     });
 
     this.loadDevices();
+  }
+
+  onLogoutBtnClicked() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

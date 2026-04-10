@@ -1,38 +1,64 @@
-﻿
-using backend.Entity;
+﻿using backend.Entity;
 using backend.Entity.DTO;
 using backend.Entity.Exceptions;
-using backend.Repository;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Identity;
 
 namespace backend.Service
 {
     public class UserService : IUserService
     {
-        private readonly AppDbContext dbContext;
+        private readonly UserManager<AppUser> userManager;
 
-        public UserService(AppDbContext dbContext)
+        public UserService(UserManager<AppUser> manager)
         {
-            this.dbContext = dbContext;
+            this.userManager = manager;
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task<IdentityResult> DeleteAsync(string id)
         {
             var user = await GetByIdAsync(id);
 
-            dbContext.Users.Remove(user);
-            await dbContext.SaveChangesAsync();
+            if (user == null)
+            {
+                return IdentityResult.Failed();
+            }
+
+            return await userManager.DeleteAsync(user);
         }
 
-        public async Task<List<User>> GetAllAsync()
+        public List<AppUser> GetAll()
         {
-            return await dbContext.Users.ToListAsync();
+            return userManager.Users.ToList();
         }
 
-        public async Task<User> GetByIdAsync(Guid id)
+        public async Task<IdentityResult> RegisterAsync(UserRequest request)
         {
-            var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+            var user = new AppUser
+            {
+                Name = request.Name,
+                Email = request.Email,
+                UserName = request.Email,
+                Role = request.Role,
+                Location = request.Location,
+            };
+
+            var result = await userManager.CreateAsync(user, request.Password);
+            if (!result.Succeeded)
+            {
+                if (result.Errors.Any(e => e.Code == "DuplicateEmail"))
+                {
+                    throw new ResourceConflictException($"Email {user.Email} already exists");
+                }
+
+                throw new ArgumentException(string.Join("; ", result.Errors.Select(e => e.Description)));
+            }
+
+            return result;
+        }
+
+        public async Task<AppUser> GetByIdAsync(string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
             if (user == null)
             {
                 throw new EntityNotFoundException($"User with id {id} does not exist");
@@ -41,82 +67,64 @@ namespace backend.Service
             return user;
         }
 
-        public async Task<User> SaveAsync(UserRequest request)
-        {
-            var existingUser = await ExistsByEmailAsync(request.Email);
-            if (existingUser)
-            {
-                throw new ResourceConflictException($"User with email {request.Email} already exists");
-            }
-
-            try
-            {
-                var userToSave = new User
-                {
-                    Name = request.Name,
-                    Location = request.Location,
-                    Role = request.Role,
-                    Email = request.Email,
-                    Password = BCrypt.Net.BCrypt.HashPassword(request.Password),
-                };
-               
-                dbContext.Users.Add(userToSave);
-                await dbContext.SaveChangesAsync();
-
-                return userToSave;
-            }
-            catch (DbUpdateException)
-            {
-                throw;
-            }    
-        }
-
-        public async Task<User> UpdateAsync(Guid id, UserRequest request)
+        public async Task<AppUser> UpdateAsync(string id, UserRequest request)
         {
             var user = await GetByIdAsync(id);
 
-
-            if (request.Name != null)
+            if (!string.IsNullOrWhiteSpace(request.Name))
             {
                 user.Name = request.Name;
             }
 
-            if (request.Email != null)
-            {
-                var emailExists = await ExistsByEmailAsync(request.Email);
-                if (emailExists)
-                {
-                    throw new ResourceConflictException($"User with email {request.Email} already exists");
-                }
-
-                user.Email = request.Email;
-            }
-
-            if (request.Password != null)
-            {
-                user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
-            }
-
-            if ( request.Location != null)
-            {
-                user.Location = request.Location;
-            }
-
-            if (request.Role != null)
+            if (!string.IsNullOrWhiteSpace(request.Role))
             {
                 user.Role = request.Role;
             }
 
-            dbContext.Users.Update(user);
-            await dbContext.SaveChangesAsync();
+            if (!string.IsNullOrWhiteSpace(request.Location))
+            {
+                user.Location = request.Location;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.Email) && request.Email != user.Email)
+            {
+                var emailResult = await userManager.SetEmailAsync(user, request.Email);
+                if (!emailResult.Succeeded)
+                {
+                    if (emailResult.Errors.Any(e => e.Code == "DuplicateEmail"))
+                    {
+                        throw new ResourceConflictException($"User with email {request.Email} already exists");
+                    }
+
+                    throw new ArgumentException(string.Join("; ", emailResult.Errors.Select(e => e.Description)));
+                }
+
+                var usernameResult = await userManager.SetUserNameAsync(user, request.Email);
+                if (!usernameResult.Succeeded)
+                {
+                    throw new ArgumentException(string.Join("; ", usernameResult.Errors.Select(e => e.Description)));
+                }
+            }
+
+
+            var result = await userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                throw new ArgumentException(string.Join("; ", result.Errors.Select(e => e.Description)));
+            }
 
             return user;
         }
 
-        public async Task<bool> ExistsByEmailAsync(string email)
+        public async Task<AppUser> FindByEmailAsync(string email)
         {
-            return await dbContext.Users
-                .AnyAsync(u => u.Email == email);
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                throw new EntityNotFoundException($"Email {email} not found");
+            }
+
+            return user;
         }
     }
 }

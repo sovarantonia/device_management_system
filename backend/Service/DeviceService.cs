@@ -37,7 +37,6 @@ namespace backend.Service
             return device;
         }
 
-
         public async Task<Device> SaveAsync(DeviceRequest deviceRequest)
         {
             if (!Enum.TryParse<DeviceType>(deviceRequest.DeviceType, true, out var deviceType))
@@ -82,20 +81,34 @@ namespace backend.Service
 
         public async Task<Device> UpdateDetailsAsync(Guid id, DeviceRequest deviceRequest)
         {
-            if (!Enum.TryParse<DeviceType>(deviceRequest.DeviceType, true, out var deviceType))
+            string finalDeviceType = deviceRequest.DeviceType ?? throw new ArgumentException("Device type is missing.");
+
+            if (!string.IsNullOrWhiteSpace(deviceRequest.DeviceType))
             {
-                throw new ArgumentException("Invalid device type. Should be Phone or Tablet");
+                if (!Enum.TryParse<DeviceType>(deviceRequest.DeviceType, true, out var deviceType))
+                {
+                    throw new ArgumentException("Invalid device type. Should be Phone or Tablet");
+                }
+
+                finalDeviceType = deviceType.ToString();
             }
+
+            var finalName = deviceRequest.Name ?? deviceRequest.Name;
+            var finalManufacturer = deviceRequest.Manufacturer ?? deviceRequest.Manufacturer;
+            var finalOS = deviceRequest.OS ?? deviceRequest.OS;
+            var finalOSVersion = deviceRequest.OSVersion ?? deviceRequest.OSVersion;
+            var finalProcessor = deviceRequest.Processor ?? deviceRequest.Processor;
+            var finalRamAmount = deviceRequest.RamAmount ?? deviceRequest.RamAmount;
 
             var exists = await dbContext.Devices.AnyAsync(d =>
                 d.Id != id &&
-                d.Name == deviceRequest.Name &&
-                d.Manufacturer == deviceRequest.Manufacturer &&
-                d.DeviceType == Enum.Parse<DeviceType>(deviceRequest.DeviceType!) &&
-                d.OS == deviceRequest.OS &&
-                d.OSVersion == deviceRequest.OSVersion &&
-                d.Processor == deviceRequest.Processor &&
-                d.RamAmount == deviceRequest.RamAmount
+                d.Name == finalName &&
+                d.Manufacturer == finalManufacturer &&
+                d.DeviceType ==  Enum.Parse<DeviceType>(finalDeviceType) &&
+                d.OS == finalOS &&
+                d.OSVersion == finalOSVersion &&
+                d.Processor == finalProcessor &&
+                d.RamAmount == finalRamAmount
             );
 
 
@@ -142,7 +155,7 @@ namespace backend.Service
             return deviceToUpdate;
         }
 
-        public async Task<List<Device>> GetUserDevicesAsync(Guid userId)
+        public async Task<List<Device>> GetUserDevicesAsync(string userId)
         {
             var userExists = await dbContext.Users.AnyAsync(u => u.Id == userId);
 
@@ -154,7 +167,7 @@ namespace backend.Service
             return await dbContext.Devices.Include(d => d.User).Where(d => d.UserId == userId).ToListAsync();
         }
 
-        public async Task<Device> AssignDeviceAsync(Guid deviceId, Guid userId)
+        public async Task<Device> AssignDeviceAsync(Guid deviceId, string userId)
         {
             var device = await GetByIdAsync(deviceId);
 
@@ -176,7 +189,7 @@ namespace backend.Service
             return device;
         }
 
-        public async Task<Device> UnassignDeviceAsync(Guid deviceId, Guid userId)
+        public async Task<Device> UnassignDeviceAsync(Guid deviceId, string userId)
         {
             var device = await GetByIdAsync(deviceId);
 

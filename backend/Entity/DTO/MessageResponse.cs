@@ -1,6 +1,6 @@
 ﻿namespace backend.Entity.DTO
 {
-    public class ErrorResponse
+    public class MessageResponse
     {
         public string? Message { get; set; }
     }

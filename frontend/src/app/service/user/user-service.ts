@@ -9,9 +9,6 @@ export class UserService {
     private readonly baseUrl = 'https://localhost:7064/user';
     private readonly http: HttpClient = inject(HttpClient);
 
-    save(userRequest: UserRequest): Observable<UserResponse> {
-        return this.http.post<UserResponse>(this.baseUrl, userRequest);
-    }
 
     delete(id: string): Observable<void> {
         return this.http.delete<void>(`${this.baseUrl}/${id}`);
@@ -27,5 +24,9 @@ export class UserService {
 
     getAll(): Observable<UserResponse[]> {
         return this.http.get<UserResponse[]>(this.baseUrl);
+    }
+
+    findByEmail(email: string): Observable<UserResponse> {
+        return this.http.get<UserResponse>(`${this.baseUrl}/search/${email}`);
     }
 }

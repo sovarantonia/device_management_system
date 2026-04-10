@@ -32,13 +32,11 @@ export class DeviceService {
         return this.http.get<DeviceResponse[]>(`${this.baseUrl}/user/${userId}`);
     }
 
-    assignDevice(deviceId: string, userId: string): Observable<DeviceResponse> {
-        const params = new HttpParams().set('userId', userId);
-        return this.http.put<DeviceResponse>(`${this.baseUrl}/${deviceId}/assign`, {params});
+    assignDevice(deviceId: string): Observable<DeviceResponse> {
+        return this.http.put<DeviceResponse>(`${this.baseUrl}/${deviceId}/assign`, null);
     }
 
-    unassignDevice(deviceId: string, userId: string): Observable<DeviceResponse> {
-        const params = new HttpParams().set('userId', userId);
-        return this.http.put<DeviceResponse>(`${this.baseUrl}/${deviceId}/unassign`, {params});
+    unassignDevice(deviceId: string): Observable<DeviceResponse> {
+        return this.http.put<DeviceResponse>(`${this.baseUrl}/${deviceId}/unassign`, null);
     }
 }

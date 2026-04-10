@@ -15,8 +15,8 @@ namespace backend.Controllers
             this.userService = userService;
         }
 
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetUserById(Guid id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserById(string id)
         {
             var user = await userService.GetByIdAsync(id);
 
@@ -25,31 +25,30 @@ namespace backend.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
-        { 
-            var users = await userService.GetAllAsync();
+        {
+            var users = userService.GetAll();
             return Ok(users.Select(u => UserMapper.ToDTO(u)));
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SaveUser([FromBody] UserRequest userRequest)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(string id)
         {
-            var user = await userService.SaveAsync(userRequest);
+            await userService.DeleteAsync(id);
+            return Ok();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] UserRequest request)
+        {
+            var user = await userService.UpdateAsync(id, request);
 
             return Ok(UserMapper.ToDTO(user));
         }
 
-        [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> DeleteUser(Guid id)
-        { 
-            await userService.DeleteAsync(id); 
-
-            return Ok(); 
-        }
-
-        [HttpPut("{id:guid}")]
-        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UserRequest request)
+        [HttpGet("search/{email}")]
+        public async Task<IActionResult> FindUserByEmail(string email)
         {
-            var user = await userService.UpdateAsync(id, request);
+            var user = await userService.FindByEmailAsync(email);
 
             return Ok(UserMapper.ToDTO(user));
         }

@@ -1,7 +1,7 @@
 export interface UserRequest {
     name: string,
-    role: string,
+    role?: string | null,
     email: string,
-    location: string,
+    location?: string | null,
     password: string,
 }

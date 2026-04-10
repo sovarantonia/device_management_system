@@ -2,7 +2,7 @@
 {
     public static class UserMapper
     {
-        public static UserResponse ToDTO(User user)
+        public static UserResponse ToDTO(AppUser user)
         {
             return new UserResponse
             {

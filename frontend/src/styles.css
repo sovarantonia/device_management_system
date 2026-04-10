@@ -37,3 +37,45 @@ button:hover {
   background-color: #718fb1;
   box-shadow: 5px 5px 5px gray;
 }
+
+form {
+    width: 100%;
+}
+
+.form-group {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    align-items: start;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.form-group p {
+    grid-column: 2;
+    margin: 0;
+    color: red;
+    font-size: 12px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+.auth-page {
+    display: flex;
+    justify-content: center;
+    padding-top: 80px;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

@@ -7,7 +7,7 @@
         <div class="device-user">
             <h3>User details</h3>
             @if (device?.user) {
-                
+
             <p> Assigned to: </p>
             <ul>
                 <li>{{ device?.user?.name }} ({{ device?.user?.email }})</li>
@@ -19,10 +19,18 @@
             }
         </div>
 
+        @if (canAssign || canUnassign) {
         <div class="device-actions">
             <h3>Options</h3>
+            @if (canAssign) {
+            <button (click)="assignDevice()">Assign this device to me</button>
+            }
+
+            @if (canUnassign) {
+            <button (click)="unassignDevice()">Unassign device</button>
+            }
         </div>
+        }
+
     </div>
-
-
 </div>
