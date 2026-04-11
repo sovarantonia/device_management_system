@@ -94,6 +94,9 @@ export class DeviceForm implements OnInit, OnChanges {
           deviceDescription: data
         })
         this.isGenerating = false;
+        this.deviceForm.get('deviceDescription')?.markAsDirty();
+        this.deviceForm.get('deviceDescription')?.markAsTouched();
+        this.deviceForm.get('deviceDescription')?.updateValueAndValidity();
       },
       error: () => {
         this.snackbarService.open('Could not generate a description', 'error');
