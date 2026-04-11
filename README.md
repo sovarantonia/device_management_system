@@ -16,6 +16,7 @@ The repository contains:
 - Device assignment and unassignment
 - Device description generation
 - Responsive frontend with form validation
+- Device search
 - SQL scripts for database creation and data initialization
 
 ## Project structure
@@ -53,7 +54,6 @@ Before running the application, you must create and populate the database.
 Update the connection string in the backend configuration (`appsettings.json`):
 
 ```
-json
 "ConnectionStrings": {
   "DefaultConnection": "Server=YOUR_SERVER;Database=device_management;Trusted_Connection=True;TrustServerCertificate=True"
 }
@@ -85,6 +85,8 @@ For generating an API key (free):
 - Generate key
 
 Set it locally as mentioned above.
+
+If no API key is configured, a fallback description is returned instead.
 
 ## Running the backend
 
@@ -124,6 +126,9 @@ Set it locally as mentioned above.
 - Navigate to the backendTests folder:
 
    - cd backendTests
+
+- In ```CustomWebApplicationFactory.cs``` change the connection string similarly to application connection string
+    - ```"Server=YOUR_SERVER;Database=device_management_test;Trusted_Connection=True;TrustServerCertificate=True"```
 
 - Run:
 
