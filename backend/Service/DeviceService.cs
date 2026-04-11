@@ -1,6 +1,7 @@
 ﻿using backend.Entity;
 using backend.Entity.DTO;
 using backend.Entity.Exceptions;
+using backend.Helper;
 using backend.Repository;
 using Microsoft.EntityFrameworkCore;
 
@@ -104,7 +105,7 @@ namespace backend.Service
                 d.Id != id &&
                 d.Name == finalName &&
                 d.Manufacturer == finalManufacturer &&
-                d.DeviceType ==  Enum.Parse<DeviceType>(finalDeviceType) &&
+                d.DeviceType == Enum.Parse<DeviceType>(finalDeviceType) &&
                 d.OS == finalOS &&
                 d.OSVersion == finalOSVersion &&
                 d.Processor == finalProcessor &&
@@ -209,6 +210,41 @@ namespace backend.Service
             await dbContext.SaveChangesAsync();
 
             return device;
+        }
+
+        public async Task<List<Device>> SearchAsync(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                return await GetAllAsync();
+            }
+
+            var normalizedQuery = DeviceRankHelper.NormalizeInput(query);
+            var queryTokens = DeviceRankHelper.CreateSearchTokens(normalizedQuery);
+
+            if (queryTokens.Count == 0)
+            {
+                return new List<Device>();
+            }
+
+            var devices = await dbContext.Devices
+                .Include(d => d.User)
+                .ToListAsync();
+
+            return devices
+                .Select(device => new
+                {
+                    Device = device,
+                    Score = DeviceRankHelper.CalculateScore(device, normalizedQuery, queryTokens)
+                })
+                .Where(x => x.Score > 0)
+                .OrderByDescending(x => x.Score)
+                .ThenBy(x => x.Device.Name)
+                .ThenBy(x => x.Device.Manufacturer)
+                .ThenBy(x => x.Device.RamAmount)
+                .ThenBy(x => x.Device.Processor)
+                .Select(x => x.Device)
+                .ToList();
         }
     }
 }

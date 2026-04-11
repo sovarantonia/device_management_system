@@ -13,5 +13,6 @@ namespace backend.Service
         public Task<List<Device>> GetUserDevicesAsync(string userId);
         public Task<Device> AssignDeviceAsync(Guid deviceId, string userId);
         public Task<Device> UnassignDeviceAsync(Guid deviceId, string userId);
+        public Task<List<Device>> SearchAsync(string query);
     }
 }

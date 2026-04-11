@@ -98,5 +98,12 @@ namespace backend.Controllers
             var response = await aiService.GenerateDescription(request);
             return Ok(response);
         }
+
+        [HttpGet("search")]
+        public async Task<ActionResult<List<DeviceResponse>>> Search([FromQuery] string query = "")
+        {
+            var result = await deviceService.SearchAsync(query);
+            return Ok(result.Select(d => DeviceMapper.ToDTO(d)));
+        }
     }
 }
