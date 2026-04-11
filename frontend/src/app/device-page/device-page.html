@@ -2,6 +2,15 @@
     <div class="device-header">
         <button (click)="onAddDeviceClick()">Add device</button>
 
+        <div class="search-section">
+        <input
+            type="text"
+            placeholder="Search devices..."
+            [(ngModel)]="searchQuery"
+            (input)="onSearchInput()"
+        />
+    </div>
+
         <div class="user-section">
             <span>{{ currentUser.name }} ({{ currentUser.email }})</span>
             <button (click)="onLogoutBtnClicked()">Logout</button>

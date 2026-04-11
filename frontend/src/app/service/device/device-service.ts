@@ -45,4 +45,9 @@ export class DeviceService {
             responseType: 'text'
         });
     }
+
+    search(query: string): Observable<DeviceResponse[]> {
+        const params = new HttpParams().set('query', query);
+        return this.http.get<DeviceResponse[]>(`${this.baseUrl}/search`, { params });
+    }
 }

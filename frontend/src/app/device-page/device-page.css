@@ -10,6 +10,21 @@
     padding: 15px;
 }
 
+.search-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.search-section input {
+  width: 100%;
+  max-width: 350px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
 .user-section {
   display: flex;
   align-items: center;

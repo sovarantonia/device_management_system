@@ -14,6 +14,9 @@
         <h2>{{ device.name }}</h2>
         <p> Manufacturer: {{ device.manufacturer }} </p>
         <p> Device type: {{ device.deviceType }} </p>
+        <p>OS: {{ device.os }} {{ device.osVersion }}</p>
+        <p>Processor: {{device.processor}}</p>
+        <p>RAM: {{device.ramAmount}} GB</p>
         @if (device.user) {
         <p> Assigned to: {{ device.user.name }} ({{ device.user.email }}) </p>
         } @else {
