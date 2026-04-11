@@ -2,6 +2,8 @@
 
 A full-stack application for managing company devices and their assignments to users.
 
+The application demo video can be found here, `demo-video.mp4`.
+
 The repository contains:
 - `backend/` - ASP.NET Core Web API
 - `frontend/` - Angular application
